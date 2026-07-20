@@ -12,7 +12,7 @@ require("./config/passport");
 // Đặt SAU dotenv.config() vì invoiceGenerator require("../db"),
 // mà db.js đọc process.env.DB_PASSWORD... ngay lúc load module (không lazy) —
 // nếu require trước dotenv.config(), Pool sẽ được tạo với toàn bộ biến undefined.
-const { runBillingCycle } = require('./services/Invoicegenerator');
+const { runBillingCycle } = require("./services/invoiceGenerator");
 
 app.use(cors());
 app.use(express.json());
