@@ -1,0 +1,25 @@
+﻿
+server.js:15:const { runBillingCycle } = require("./services/invoiceGenerator");
+server.js:44:const productRoutes = require("./routes/productRoutes");
+server.js:45:const authRoutes = require("./routes/authRoutes");
+server.js:46:const userRoutes = require("./routes/userRoutes");
+server.js:47:const traderMeRoutes = require("./routes/traderMeRoutes");
+server.js:48:const traderRoutes = require("./routes/traderRoutes");
+server.js:49:const contractRoutes = require("./routes/contractRoutes");
+server.js:50:const dashboardRoutes = require("./routes/dashboardRoutes");
+server.js:51:const marketRoutes = require("./routes/marketRoutes");
+server.js:52:const zoneRoutes =require("./routes/zoneRoutes");
+server.js:53:const stallRoutes =require("./routes/stallRoutes");
+server.js:54:const cartRoutes = require("./routes/cartRoutes");
+server.js:55:const orderRoutes = require("./routes/orderRoutes");
+server.js:56:const paymentRoutes = require("./routes/paymentRoutes");
+server.js:57:const invoiceRoutes =require("./routes/invoiceRoutes");
+server.js:58:const reportRoutes =require("./routes/reportRoutes");
+server.js:59:const exportRoutes =require("./routes/exportRoutes");
+server.js:60:const stallRequestRoutes = require("./routes/stallRequestRoutes");
+server.js:62:const managerRouter = require("./routes/managerRouter");
+server.js:64:const renewalRequestRoutes = require("./routes/renewalRequestRoutes");
+server.js:66:const traderPaymentRoutes = require("./routes/traderPaymentRoutes");
+server.js:68:app.use("/api/stall-feedback", require("./routes/stallFeedbackRoutes"));
+
+
