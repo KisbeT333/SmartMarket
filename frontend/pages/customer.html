@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartMarket — Khách hàng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/customer.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ TOP HEADER ══════════════════════════════════════ -->
+<header class="top-header">
+  <div class="header-brand">Smart<span>Market</span></div>
+
+  <div class="header-search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="globalSearch" placeholder="Tìm sản phẩm, chợ..." />
+  </div>
+
+  <div class="header-right">
+    <!-- Yêu thích -->
+    <button class="hdr-btn" onclick="goTab('wishlist')" title="Yêu thích">
+      <i class="fa-solid fa-heart"></i>
+      <span class="hdr-badge" id="wishBadge" style="display:none">0</span>
+    </button>
+
+    <!-- Giỏ hàng -->
+    <button class="hdr-btn" onclick="goTab('cart')" title="Giỏ hàng">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span class="hdr-badge" id="cartBadge" style="display:none">0</span>
+    </button>
+
+    <!-- Avatar / dropdown -->
+    <div class="dropdown" id="userDropdown">
+      <button class="avatar-btn" id="avatarBtn" onclick="toggleDropdown()">KH</button>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="#" onclick="goTab('profile');toggleDropdown();return false;">
+          <i class="fa-solid fa-user"></i> Hồ sơ cá nhân
+        </a>
+        <a href="#" onclick="goTab('orders');toggleDropdown();return false;">
+          <i class="fa-solid fa-box"></i> Đơn hàng của tôi
+        </a>
+        <div class="divider"></div>
+        <button class="danger" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════ TAB NAV ══════════════════════════════════════ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="products" onclick="goTab('products')">
+    <i class="fa-solid fa-store"></i> Sản phẩm
+  </button>
+  <button class="tab-btn" data-tab="markets" onclick="goTab('markets')">
+    <i class="fa-solid fa-shop"></i> Chợ & Sạp
+  </button>
+  <button class="tab-btn" data-tab="wishlist" onclick="goTab('wishlist')">
+    <i class="fa-solid fa-heart"></i> Yêu thích
+    <span id="wishTabBadge" class="tab-count-badge" style="display:none">0</span>
+  </button>
+  <button class="tab-btn" data-tab="cart" onclick="goTab('cart')">
+    <i class="fa-solid fa-cart-shopping"></i> Giỏ hàng
+    <span id="cartTabBadge" class="tab-count-badge" style="display:none">0</span>
+  </button>
+  <button class="tab-btn" data-tab="orders" onclick="goTab('orders')">
+    <i class="fa-solid fa-box"></i> Đơn hàng
+  </button>
+  <button class="tab-btn" data-tab="profile" onclick="goTab('profile')">
+    <i class="fa-solid fa-user"></i> Hồ sơ
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════ MAIN ══════════════════════════════════════ -->
+<main class="main-wrap">
+
+  <!-- ─── PAGE: SẢN PHẨM ─── -->
+  <div id="page-products" class="page active">
+
+    <!-- Banner chào mừng -->
+    <div class="welcome-banner">
+      <div class="welcome-pattern" aria-hidden="true"></div>
+      <div class="welcome-text">
+        <p class="welcome-eyebrow">Chào mừng trở lại</p>
+        <h2 id="welcomeName">Khách hàng thân mến 👋</h2>
+        <p class="welcome-sub">Rau củ, hải sản, đặc sản tươi mới mỗi ngày từ các tiểu thương uy tín quanh bạn.</p>
+      </div>
+      <div class="welcome-stats">
+        <div class="w-stat"><b id="welcomeProdCount">—</b><span>Sản phẩm</span></div>
+        <div class="w-stat"><b id="welcomeMktCount">—</b><span>Chợ đang bán</span></div>
+        <div class="w-stat"><b id="welcomeCartCount">0</b><span>Trong giỏ</span></div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div>
+        <div class="section-title">Sản phẩm tại chợ</div>
+        <div class="section-sub" id="prodCount">Đang tải...</div>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <input type="text" id="prodSearch" placeholder="Tìm theo tên sản phẩm..." oninput="renderProducts()" />
+      <select id="prodFilterMarket" onchange="renderProducts()">
+        <option value="">Tất cả chợ</option>
+      </select>
+      <select id="prodSort" onchange="renderProducts()">
+        <option value="">Mặc định</option>
+        <option value="price_asc">Giá: thấp → cao</option>
+        <option value="price_desc">Giá: cao → thấp</option>
+        <option value="name_asc">Tên: A → Z</option>
+      </select>
+      <span class="filter-count" id="prodCountLabel"></span>
+    </div>
+    <div class="product-grid" id="productGrid">
+      <div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+    <div class="pagination" id="productPagination"></div>
+
+    <!-- Đã xem gần đây -->
+    <div id="recentSection" class="recent-section" style="display:none">
+      <div class="recent-head">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Đã xem gần đây</span>
+      </div>
+      <div class="recent-strip" id="recentStrip"></div>
+    </div>
+  </div>
+
+  <!-- ─── PAGE: YÊU THÍCH ─── -->
+  <div id="page-wishlist" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Sản phẩm yêu thích</div>
+        <div class="section-sub" id="wishCount">0 sản phẩm</div>
+      </div>
+    </div>
+    <div class="product-grid" id="wishGrid"></div>
+  </div>
+
+  <!-- ─── PAGE: CHỢ & SẠP ─── -->
+  <div id="page-markets" class="page">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Danh sách chợ</div>
+        <div class="section-sub">Khám phá các chợ trong hệ thống SmartMarket</div>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <input type="text" id="mktSearch" placeholder="Tìm chợ theo tên, địa chỉ..." oninput="renderMarkets()" />
+      <span class="filter-count" id="mktCountLabel"></span>
+    </div>
+    <div class="market-grid" id="marketGrid">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+    <div class="pagination" id="marketPagination"></div>
+  </div>
+
+  <!-- ─── PAGE: GIỎ HÀNG ─── -->
+  <div id="page-cart" class="page">
+    <div class="section-header">
+      <div class="section-title">Giỏ hàng của tôi</div>
+    </div>
+    <div class="cart-layout" id="cartLayout">
+      <!-- Render by JS -->
+    </div>
+  </div>
+
+  <!-- ─── PAGE: ĐƠN HÀNG ─── -->
+  <div id="page-orders" class="page">
+    <div class="section-header">
+      <div class="section-title">Đơn hàng của tôi</div>
+      <span class="section-sub" id="orderCount"></span>
+    </div>
+    <div id="orderList">
+      <div class="skeleton" style="height:100px;margin-bottom:12px;"></div>
+      <div class="skeleton" style="height:100px;margin-bottom:12px;"></div>
+    </div>
+  </div>
+
+  <!-- ─── PAGE: HỒ SƠ ─── -->
+  <div id="page-profile" class="page">
+    <div class="section-title" style="margin-bottom:18px;">Hồ sơ cá nhân</div>
+    <div class="profile-layout">
+      <div class="card profile-avatar-wrap">
+        <div class="profile-avatar" id="profileAvatar">KH</div>
+        <div class="profile-name" id="profileName">—</div>
+        <div class="profile-role">Khách hàng</div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:15px;margin-bottom:16px;">Thông tin tài khoản</div>
+        <div class="profile-field">
+          <label>Tên đăng nhập</label>
+          <input type="text" id="profileUsername" readonly style="background:var(--surface2);cursor:default;" />
+        </div>
+        <div class="profile-field">
+          <label>Họ và tên</label>
+          <input type="text" id="profileFullName" />
+        </div>
+        <div class="profile-field">
+          <label>Số điện thoại</label>
+          <input type="text" id="profilePhone" />
+        </div>
+        <div class="profile-field">
+          <label>Email</label>
+          <input type="email" id="profileEmail" />
+        </div>
+        <div class="form-msg" id="profileMsg"></div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button class="btn btn-primary" onclick="saveProfile()">
+            <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+          </button>
+          <button class="btn btn-secondary" onclick="openChangePwdModal()">
+            <i class="fa-solid fa-lock"></i> Đổi mật khẩu
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════════════════════════════════ MODALS ══════════════════════════════════════ -->
+
+<!-- Modal: Chi tiết sản phẩm -->
+<div class="modal-overlay" id="modalProduct" onclick="closeModalOverlay(event,'modalProduct')">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <div class="modal-title" id="mpTitle">Chi tiết sản phẩm</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button class="modal-wish-btn" id="mpWishBtn" title="Thêm vào yêu thích">
+          <i class="fa-solid fa-heart"></i>
+        </button>
+        <button class="modal-close" onclick="closeModal('modalProduct')">×</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div id="mpEmoji" style="font-size:4rem;height:100px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8f5ee,#d4ecd9);border-radius:12px;margin-bottom:12px;"></div>
+    </div>
+    <div id="mpBody" style="display:flex;flex-direction:column;gap:8px;font-size:13.5px;">
+    </div>
+    <div class="qty-stepper" style="margin-top:16px;">
+      <span class="qty-stepper-label">Số lượng</span>
+      <div class="qty-ctrl">
+        <button type="button" onclick="changeMpQty(-1)">−</button>
+        <span id="mpQtyValue">1</span>
+        <button type="button" onclick="changeMpQty(1)">+</button>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-block" style="margin-top:14px;" id="mpAddBtn" onclick="">
+      <i class="fa-solid fa-cart-plus"></i> Thêm vào giỏ hàng
+    </button>
+  </div>
+</div>
+
+<!-- Modal: Chi tiết chợ / sạp -->
+<div class="modal-overlay" id="modalMarket" onclick="closeModalOverlay(event,'modalMarket')">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <div class="modal-title" id="mmTitle">Thông tin chợ</div>
+      <button class="modal-close" onclick="closeModal('modalMarket')">×</button>
+    </div>
+    <div id="mmBody"></div>
+    <div style="margin-top:16px;">
+      <div style="font-weight:700;font-size:13.5px;margin-bottom:10px;">Sạp đang trống</div>
+      <div id="mmStalls" style="display:flex;flex-direction:column;gap:8px;max-height:250px;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Đổi mật khẩu -->
+<div class="modal-overlay" id="modalChangePwd" onclick="closeModalOverlay(event,'modalChangePwd')">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <div class="modal-title">Đổi mật khẩu</div>
+      <button class="modal-close" onclick="closeModal('modalChangePwd')">×</button>
+    </div>
+    <div class="profile-field">
+      <label>Mật khẩu mới</label>
+      <input type="password" id="newPwd" placeholder="Nhập mật khẩu mới" />
+    </div>
+    <div class="profile-field">
+      <label>Xác nhận mật khẩu</label>
+      <input type="password" id="confirmPwd" placeholder="Nhập lại mật khẩu" />
+    </div>
+    <div class="form-msg" id="pwdMsg"></div>
+    <button class="btn btn-primary btn-block" style="margin-top:12px;" onclick="changePwd()">
+      <i class="fa-solid fa-lock"></i> Cập nhật mật khẩu
+    </button>
+  </div>
+</div>
+
+<!-- Modal: Xác nhận đặt hàng -->
+<div class="modal-overlay" id="modalCheckout" onclick="closeModalOverlay(event,'modalCheckout')">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-bag-shopping" style="color:var(--accent);margin-right:8px;"></i>Xác nhận đặt hàng</div>
+      <button class="modal-close" onclick="closeModal('modalCheckout')">×</button>
+    </div>
+
+    <!-- Địa chỉ giao hàng -->
+    <div class="checkout-section">
+      <label class="checkout-label" for="checkoutAddress"><i class="fa-solid fa-location-dot"></i> Địa chỉ giao hàng</label>
+      <textarea id="checkoutAddress" rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành..."></textarea>
+    </div>
+
+    <!-- Ghi chú -->
+    <div class="checkout-section">
+      <label class="checkout-label" for="checkoutNote"><i class="fa-solid fa-note-sticky"></i> Ghi chú cho người giao hàng (không bắt buộc)</label>
+      <input type="text" id="checkoutNote" placeholder="VD: Giao giờ hành chính, gọi trước khi giao..." />
+    </div>
+
+    <!-- Phương thức thanh toán -->
+    <div class="checkout-section">
+      <label class="checkout-label"><i class="fa-solid fa-wallet"></i> Phương thức thanh toán</label>
+      <div class="pay-methods" id="payMethods">
+        <label class="pay-option" data-method="cod">
+          <input type="radio" name="payMethod" value="cod" checked onchange="onPayMethodChange()" />
+          <span class="pay-icon pay-icon-cod"><i class="fa-solid fa-truck-fast"></i></span>
+          <span class="pay-info"><b>Thanh toán khi nhận hàng</b><small>Ship COD — trả tiền mặt cho shipper</small></span>
+          <span class="pay-check"><i class="fa-solid fa-circle-check"></i></span>
+        </label>
+        <label class="pay-option" data-method="momo">
+          <input type="radio" name="payMethod" value="momo" onchange="onPayMethodChange()" />
+          <span class="pay-icon pay-icon-momo">M</span>
+          <span class="pay-info"><b>Ví MoMo</b><small>Chuyển khoản qua số điện thoại ví MoMo</small></span>
+          <span class="pay-check"><i class="fa-solid fa-circle-check"></i></span>
+        </label>
+        <label class="pay-option" data-method="bank">
+          <input type="radio" name="payMethod" value="bank" onchange="onPayMethodChange()" />
+          <span class="pay-icon pay-icon-bank"><i class="fa-solid fa-building-columns"></i></span>
+          <span class="pay-info"><b>Chuyển khoản ngân hàng</b><small>Chuyển khoản qua tài khoản ngân hàng</small></span>
+          <span class="pay-check"><i class="fa-solid fa-circle-check"></i></span>
+        </label>
+      </div>
+
+      <div id="payDetailMomo" class="pay-detail" style="display:none">
+        <div class="pay-detail-row"><span>Số điện thoại MoMo</span><b>0909 000 111</b></div>
+        <div class="pay-detail-row"><span>Chủ tài khoản</span><b>CHỢ SMARTMARKET</b></div>
+        <p class="pay-detail-note"><i class="fa-solid fa-circle-info"></i> Vui lòng chuyển đúng số tiền và ghi chú mã đơn hàng để được xác nhận nhanh nhất.</p>
+      </div>
+      <div id="payDetailBank" class="pay-detail" style="display:none">
+        <div class="pay-detail-row"><span>Ngân hàng</span><b>Vietcombank</b></div>
+        <div class="pay-detail-row"><span>Số tài khoản</span><b>0071 000 123 456</b></div>
+        <div class="pay-detail-row"><span>Chủ tài khoản</span><b>CHỢ SMARTMARKET</b></div>
+        <p class="pay-detail-note"><i class="fa-solid fa-circle-info"></i> Nội dung chuyển khoản vui lòng ghi số điện thoại của bạn để đối chiếu.</p>
+      </div>
+    </div>
+
+    <!-- Tóm tắt đơn hàng -->
+    <div id="checkoutSummary" class="checkout-summary"></div>
+
+    <div class="form-msg" id="checkoutMsg"></div>
+    <div style="display:flex;gap:10px;margin-top:14px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="closeModal('modalCheckout')">Hủy</button>
+      <button class="btn btn-primary" style="flex:1;" id="confirmOrderBtn" onclick="placeOrder()">
+        <i class="fa-solid fa-check"></i> Xác nhận đặt hàng
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toastContainer"></div>
+
+<!-- Nút cuộn lên đầu trang -->
+<button id="scrollTopBtn" class="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Lên đầu trang" aria-label="Lên đầu trang">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<script src="../js/customer.js"></script>
+</body>
+</html>

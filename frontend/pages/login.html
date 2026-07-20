@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng nhập - SmartMarket</title>
+
+    <!-- GOOGLE FONT — đồng bộ với trang chủ (Fraunces + Inter) -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="../css/login.css">
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- LEFT -->
+    <div class="left">
+
+        <div class="login-box">
+
+            <h2>Đăng nhập</h2>
+
+            <p class="subtitle">
+                Chào mừng bạn quay trở lại hệ thống quản lý chợ thông minh.
+            </p>
+
+            <form id="loginForm">
+
+                <!-- USERNAME -->
+                <div class="form-group">
+
+                    <label for="username">
+                        Tên đăng nhập
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Nhập tên đăng nhập"
+                        required>
+
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+
+                    <label for="password">
+                        Mật khẩu
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Nhập mật khẩu"
+                        required>
+
+                </div>
+
+                <!-- OPTIONS -->
+                <div class="options">
+
+                    <label class="remember">
+
+                        <input type="checkbox">
+
+                        Ghi nhớ tôi
+
+                    </label>
+
+                    <a href="forgot-password.html"
+                       class="forgot">
+
+                        Quên mật khẩu?
+
+                    </a>
+
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit">
+                    Đăng nhập
+                </button>
+
+            </form>
+
+            <!-- GOOGLE LOGIN -->
+            <div class="google-login">
+
+                <div class="divider">
+                    <span>Hoặc</span>
+                </div>
+
+                <a href="http://127.0.0.1:3000/api/auth/google"
+                   class="google-btn">
+
+                    <svg viewBox="0 0 18 18" aria-hidden="true">
+                        <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.85 2.09-1.81 2.73v2.27h2.92c1.71-1.57 2.69-3.88 2.69-6.64z"/>
+                        <path fill="#34A853" d="M9 18c2.43 0 4.47-.81 5.96-2.18l-2.92-2.27c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.33C2.44 15.98 5.48 18 9 18z"/>
+                        <path fill="#FBBC05" d="M3.97 10.7c-.18-.54-.28-1.11-.28-1.7s.1-1.16.28-1.7V4.97H.96A8.99 8.99 0 0 0 0 9c0 1.45.35 2.83.96 4.03l3.01-2.33z"/>
+                        <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.97l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/>
+                    </svg>
+
+                    Đăng nhập bằng Google
+
+                </a>
+
+            </div>
+
+            <!-- MESSAGE -->
+            <p id="message"></p>
+
+            <!-- REGISTER -->
+            <div class="register">
+
+                Bạn chưa có tài khoản?
+
+                <a href="register.html">
+
+                    Đăng ký miễn phí
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+
+        <div class="right-pattern" aria-hidden="true"></div>
+
+        <div class="circle">
+
+            <div class="brand">
+
+                <h1>
+                    Smart<span>Market</span>
+                </h1>
+
+                <p>
+                    Nền tảng quản lý chợ thông minh giúp
+                    số hóa toàn bộ quy trình vận hành,
+                    kết nối ban quản lý, tiểu thương
+                    và khách hàng trên cùng một hệ thống.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../js/login.js"></script>
+
+</body>
+</html>

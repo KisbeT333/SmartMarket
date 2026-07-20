@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Product Management</title>
+
+<link rel="stylesheet" href="../css/products.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+📦 Product Management
+</h1>
+
+
+
+<div class="toolbar">
+
+
+<input 
+id="search"
+placeholder="Tìm sản phẩm..."
+>
+
+
+<button onclick="openForm()">
++ Add Product
+</button>
+
+
+</div>
+
+
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Sản phẩm</th>
+
+<th>Giá</th>
+
+<th>Tiểu thương</th>
+
+<th>Quầy</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+
+
+<tbody id="productList">
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+
+
+
+
+<div 
+id="formBox"
+class="modal">
+
+
+<div class="form">
+
+
+<h2 id="title">
+Thêm sản phẩm
+</h2>
+
+
+
+<input 
+id="name"
+placeholder="Tên sản phẩm"
+>
+
+
+
+<input 
+id="price"
+placeholder="Giá"
+type="number"
+>
+
+
+
+<input 
+id="trader_id"
+placeholder="Trader ID"
+>
+
+
+
+<input 
+id="stall_id"
+placeholder="Stall ID"
+>
+
+
+
+
+<button onclick="saveProduct()">
+Save
+</button>
+
+
+<button onclick="closeForm()">
+Cancel
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+<script src="../js/products.js"></script>
+
+
+</body>
+
+</html>

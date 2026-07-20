@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Contract Management</title>
+
+<link rel="stylesheet" href="../css/contracts.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+📄 Contract Management
+</h1>
+
+
+<button onclick="openForm()">
++ Thêm hợp đồng
+</button>
+
+
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Tiểu thương</th>
+
+<th>Quầy</th>
+
+<th>Chợ</th>
+
+<th>Bắt đầu</th>
+
+<th>Kết thúc</th>
+
+<th>Tiền thuê</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="contractList">
+
+</tbody>
+
+
+
+</table>
+
+
+
+
+
+
+<div id="formBox"
+class="modal">
+
+
+<div class="form">
+
+
+<h2>
+Contract
+</h2>
+
+
+
+<input id="trader_id"
+placeholder="Trader ID">
+
+
+
+<input id="stall_id"
+placeholder="Stall ID">
+
+
+
+<input id="start_date"
+type="date">
+
+
+
+<input id="end_date"
+type="date">
+
+
+
+<input id="monthly_rent"
+placeholder="Tiền thuê">
+
+
+
+<select id="status">
+
+<option value="ACTIVE">
+ACTIVE
+</option>
+
+<option value="EXPIRED">
+EXPIRED
+</option>
+
+
+<option value="CANCELLED">
+CANCELLED
+</option>
+
+
+</select>
+
+
+
+
+<button onclick="saveContract()">
+Save
+</button>
+
+
+<button onclick="closeForm()">
+Cancel
+</button>
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+<script src="../js/contracts.js"></script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartMarket — Chợ truyền thống số hóa</title>
+<meta name="description" content="SmartMarket — nền tảng quản lý và mua bán tại các chợ truyền thống Cần Thơ. Tươi mỗi ngày, giá chuẩn, giao hàng tận nơi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Bỏ qua, đến nội dung chính</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="index.html" aria-label="SmartMarket — Trang chủ">Smart<span>Market</span></a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Điều hướng chính">
+      <a href="#categories">Danh mục</a>
+      <a href="#markets">Chợ</a>
+      <a href="#deals">Ưu đãi</a>
+      <a href="#about">Giới thiệu</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="cartBtn" type="button" aria-label="Giỏ hàng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 11.5a1 1 0 0 1-1 .9H8a1 1 0 0 1-1-.9L6 8Z"/><path d="M9 8V6a3 3 0 1 1 6 0v2"/></svg>
+        <span class="badge" id="cartBadge">0</span>
+      </button>
+      <button class="icon-btn" id="myOrdersBtn" type="button" aria-label="Đơn hàng của tôi" title="Đơn hàng của tôi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+      </button>
+      <a class="btn btn-outline" href="../frontend/pages/login.html">Đăng nhập</a>
+      <a class="btn btn-solid" href="../frontend/pages/trader.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10 5.5 4h13L20 10"/><path d="M4 10v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9"/><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/></svg>
+        Tiểu thương
+      </a>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Mở menu" aria-expanded="false" aria-controls="mainNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCartDrawer()"></div>
+
+<!-- Cart Drawer -->
+<aside class="cart-drawer" id="cartDrawer" hidden aria-label="Giỏ hàng">
+  <div class="cart-header">
+    <h2>🛒 Giỏ hàng</h2>
+    <button class="cart-close-btn" id="cartDrawerClose" aria-label="Đóng giỏ hàng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <div class="cart-empty" id="cartEmpty" style="display:flex">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11.5a1 1 0 0 1-1 .9H8a1 1 0 0 1-1-.9L6 8Z"/><path d="M9 8V6a3 3 0 1 1 6 0v2"/></svg>
+    <p>Giỏ hàng của bạn đang trống</p>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Tổng cộng</span>
+      <span class="cart-total-val" id="cartTotal">0đ</span>
+    </div>
+    <button class="checkout-btn" type="button" id="checkoutBtn">Tiến hành đặt hàng</button>
+  </div>
+</aside>
+
+<!-- Orders Overlay -->
+<div class="cart-overlay" id="ordersOverlay" onclick="closeOrdersDrawer()"></div>
+
+<!-- Order History Drawer -->
+<aside class="cart-drawer" id="ordersDrawer" hidden aria-label="Đơn hàng của tôi">
+  <div class="cart-header">
+    <h2>🧾 Đơn hàng của tôi</h2>
+    <button class="cart-close-btn" id="ordersDrawerClose" aria-label="Đóng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+
+  <form id="orderLookupForm" class="order-lookup-form">
+    <p class="order-lookup-hint">Nhập số điện thoại đã dùng để đặt hàng để tra cứu đơn (kể cả trên máy khác).</p>
+    <div class="cf-row order-lookup-row">
+      <input id="lookupPhone" type="tel" placeholder="Số điện thoại đã đặt hàng" required inputmode="tel">
+      <button class="btn btn-solid" type="submit">Tra cứu</button>
+    </div>
+    <div class="cf-error-msg" id="lookupError" style="display:none;"></div>
+  </form>
+
+  <div class="cart-empty" id="ordersEmpty" style="display:flex">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+    <p>Chưa có đơn hàng nào được lưu trên máy này. Nhập SĐT ở trên để tra cứu.</p>
+  </div>
+  <div class="order-history-list" id="ordersList"></div>
+</aside>
+
+<!-- Checkout Overlay & Modal — đặt hàng không cần đăng nhập -->
+<div class="checkout-overlay" id="checkoutOverlay"></div>
+<div class="checkout-modal" id="checkoutModal" hidden role="dialog" aria-modal="true" aria-label="Đặt hàng">
+  <div class="checkout-modal-inner">
+    <button class="cart-close-btn checkout-close" id="checkoutClose" type="button" aria-label="Đóng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+
+    <!-- Bước 1: điền thông tin -->
+    <div id="checkoutFormView">
+      <h2 class="checkout-title">Thông tin đặt hàng</h2>
+      <p class="checkout-sub">Không cần tài khoản — chỉ cần điền thông tin bên dưới là đặt hàng được ngay.</p>
+
+      <form id="checkoutForm" class="checkout-form" novalidate>
+        <div class="cf-row">
+          <label for="cfName">Họ và tên <span class="req">*</span></label>
+          <input id="cfName" name="name" required placeholder="Nguyễn Văn A" autocomplete="name">
+        </div>
+        <div class="cf-row cf-row-2">
+          <div>
+            <label for="cfPhone">Số điện thoại <span class="req">*</span></label>
+            <input id="cfPhone" name="phone" required placeholder="09xxxxxxxx" inputmode="tel" autocomplete="tel">
+          </div>
+          <div>
+            <label for="cfEmail">Email (không bắt buộc)</label>
+            <input id="cfEmail" name="email" type="email" placeholder="ban@email.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="cf-row">
+          <label for="cfAddress">Địa chỉ giao hàng <span class="req">*</span></label>
+          <textarea id="cfAddress" name="address" required rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành..."></textarea>
+        </div>
+        <div class="cf-row">
+          <label for="cfNote">Ghi chú (không bắt buộc)</label>
+          <input id="cfNote" name="note" placeholder="Giao giờ hành chính, gọi trước khi giao...">
+        </div>
+
+        <div class="cf-row">
+          <span class="cf-label-top">Phương thức thanh toán <span class="req">*</span></span>
+          <div class="pay-options">
+            <label class="pay-option is-selected">
+              <input type="radio" name="payment" value="cod" checked>
+              <span class="pay-option-icon">💵</span>
+              <span class="pay-option-text">
+                <b>Thanh toán khi nhận hàng</b>
+                <small>Trả tiền mặt cho shipper — nhận hàng mới thanh toán</small>
+              </span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="payment" value="bank">
+              <span class="pay-option-icon">🏦</span>
+              <span class="pay-option-text">
+                <b>Chuyển khoản ngân hàng</b>
+                <small>Nhận thông tin chuyển khoản sau khi đặt hàng</small>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="checkout-summary" id="checkoutSummary"></div>
+
+        <button type="submit" class="checkout-submit-btn">Xác nhận đặt hàng</button>
+      </form>
+    </div>
+
+    <!-- Bước 2: xác nhận thành công -->
+    <div id="checkoutSuccessView" hidden></div>
+  </div>
+</div>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="hero-pattern" aria-hidden="true"></div>
+    <div class="hero-inner">
+
+      <div class="hero-content">
+        <p class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13c0 4 3 7 7 7 0-6 3-9 7-9 0 6-3 9-7 9"/><path d="M5 13c4-1 6 1 7 3"/></svg>
+          quản lý chợ truyền thống
+        </p>
+        <h1 class="hero-title">Quản lý thông minh<br><em>SmartMarket</em>,<br>giá chuẩn</h1>
+        <p class="hero-desc">Khám phá hàng nghìn sản phẩm tươi sống, đặc sản địa phương từ các tiểu thương uy tín — giao hàng tận nơi, thanh toán dễ dàng.</p>
+
+        <form class="search-bar" id="searchForm" role="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+          <label class="visually-hidden" for="searchInput">Tìm sản phẩm</label>
+          <input type="search" id="searchInput" placeholder="Tìm rau, thịt, đặc sản...">
+          <button type="submit">Tìm kiếm</button>
+        </form>
+
+        <dl class="hero-stats" id="heroStats">
+          <div class="stat"><dt id="statTraders">—</dt><dd>Tiểu thương</dd></div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat"><dt id="statMarkets">—</dt><dd>Chợ</dd></div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat"><dt id="statRating">—</dt><dd>Đánh giá</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-panels" id="heroPanels">
+        <div class="panel panel-revenue" id="revenueCard">
+          <p class="panel-label">Doanh thu hôm nay</p>
+          <p class="panel-value" id="revenueValue">—</p>
+          <p class="panel-sub" id="revenueMarket">—</p>
+          <div class="progress-track"><div class="progress-fill" id="revenueProgress"></div></div>
+          <p class="panel-meta" id="revenueUpdated"></p>
+        </div>
+
+        <div class="panel panel-rating" id="ratingCard">
+          <div class="stars" id="ratingStars" aria-hidden="true">★★★★★</div>
+          <p class="panel-value" id="ratingValue">—</p>
+          <p class="panel-sub" id="ratingCount">— đánh giá</p>
+        </div>
+
+        <div class="panel panel-fresh">
+          <div class="fresh-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13c0 4 3 7 7 7 0-6 3-9 7-9 0 6-3 9-7 9"/><path d="M5 13c4-1 6 1 7 3"/></svg>
+          </div>
+          <div>
+            <p class="fresh-title">Tươi mỗi ngày</p>
+            <p class="fresh-sub">Đảm bảo nguồn gốc</p>
+          </div>
+        </div>
+
+        <div class="panel panel-product" id="featuredProductCard" aria-live="polite">
+          <div class="panel-product-skeleton" id="featuredProductSkeleton" aria-hidden="true"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="markets" class="section">
+    <div class="section-head">
+      <span class="section-eyebrow">Hệ thống chợ</span>
+      <h2>Chợ đang vận hành</h2>
+      <p>Dữ liệu sạp, tiểu thương và doanh thu được cập nhật trực tiếp từ hệ thống quản lý chợ.</p>
+    </div>
+    <div class="markets-carousel">
+      <button class="carousel-nav carousel-prev" id="marketsPrev" type="button" aria-label="Chợ trước">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="markets-grid" id="marketsGrid" aria-live="polite">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+      <button class="carousel-nav carousel-next" id="marketsNext" type="button" aria-label="Chợ tiếp theo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+    <div class="markets-dots" id="marketsDots" aria-hidden="true"></div>
+  </section>
+
+  <section id="categories" class="section section-alt">
+    <div class="section-head">
+      <span class="section-eyebrow">Vừa nhập sạp</span>
+      <h2 id="productsHeading">Sản phẩm tươi mới</h2>
+      <p>Chọn từ các sạp uy tín, có thông tin tiểu thương rõ ràng và đặt hàng trực tuyến.</p>
+    </div>
+    <div class="filter-tabs" id="productFilters" aria-label="Lọc theo chợ">
+      <button class="filter-tab active" data-market="">Tất cả</button>
+    </div>
+    <div class="products-grid" id="productsGrid" aria-live="polite">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn-load-more" id="loadMoreBtn" type="button">Xem thêm sản phẩm</button>
+    </div>
+  </section>
+
+  <!-- Tiểu thương nổi bật -->
+  <section id="trader" class="section">
+    <div class="section-head">
+      <span class="section-eyebrow">Tiểu thương uy tín</span>
+      <h2>Người bán nổi bật</h2>
+      <p>Các tiểu thương được đánh giá cao nhất tại các chợ Cần Thơ.</p>
+    </div>
+    <div class="traders-grid" id="tradersGrid" aria-live="polite">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+
+    <!-- Trader CTA -->
+    <div class="trader-cta" style="margin-top:2.5rem">
+      <div>
+        <h3 style="font-family:var(--font-display);font-size:1.6rem;color:var(--parch-light);font-weight:400;margin-bottom:.5rem;">Bạn là tiểu thương?</h3>
+        <p style="color:rgba(245,237,216,.6);font-size:.93rem;max-width:28rem;line-height:1.6;">Đăng ký sạp trực tuyến, quản lý đơn hàng và theo dõi doanh thu ngay trên SmartMarket.</p>
+      </div>
+      <div class="tsp-stats">
+        <div class="tsp-stat"><b id="tspTraders">1,200+</b><span>Tiểu thương</span></div>
+        <div class="tsp-stat"><b id="tspStalls">491</b><span>Sạp</span></div>
+        <div class="tsp-stat"><b id="tspOrders">8,350+</b><span>Đơn hàng</span></div>
+        <div class="tsp-stat"><b id="tspRevenue">245M đ</b><span>Doanh thu</span></div>
+      </div>
+      <a class="btn btn-solid" href="#">Đăng ký ngay</a>
+    </div>
+  </section>
+
+  
+
+</main>
+
+<footer class="site-footer" id="about">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <p class="logo logo-footer">Smart<span>Market</span></p>
+      <p>Nền tảng số hóa chợ truyền thống — kết nối tiểu thương, ban quản lý chợ và khách hàng</p>
+    </div>
+    <div class="footer-col">
+      <h3>Khám phá</h3>
+      <a href="#markets">Danh sách chợ</a>
+      <a href="#categories">Sản phẩm</a>
+      <a href="#deals">Ưu đãi hôm nay</a>
+    </div>
+    <div class="footer-col">
+      <h3>Dành cho tiểu thương</h3>
+      <a href="#trader">Đăng ký sạp</a>
+      <a href="#trader">Quản lý đơn hàng</a>
+      <a href="#trader">Báo cáo doanh thu</a>
+    </div>
+    <div class="footer-col">
+      <h3>Hỗ trợ</h3>
+      <a href="#about">Về SmartMarket</a>
+      <a href="#about">Liên hệ ban quản lý</a>
+      <a href="#about">Phản hồi &amp; khiếu nại</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="footerYear"></span> SmartMarket. Số hóa chợ truyền thống</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

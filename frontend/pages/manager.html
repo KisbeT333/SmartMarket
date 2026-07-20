@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartMarket — Cổng Quản lý Chợ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/manager.css">
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Smart<span>Market</span></div>
+    <div class="sub">Cổng quản lý chợ</div>
+    <div class="portal-tag">Quản lý chợ</div>
+  </div>
+
+  <!-- Thẻ thông tin chợ đang quản lý -->
+  <div class="sidebar-market-card" id="sidebarMarketCard">
+    <div class="smc-label">Chợ đang quản lý</div>
+    <div class="smc-name" id="sidebarMarketName">Đang tải...</div>
+    <div class="smc-meta" id="sidebarMarketMeta">—</div>
+    <div class="smc-more" id="sidebarMarketMore" onclick="goPage('my-markets')" style="display:none;">
+      +<span id="sidebarMoreCount">0</span> chợ khác →
+    </div>
+  </div>
+
+  <nav class="nav-section">
+    <div class="nav-group-label">Tổng quan</div>
+    <div class="nav-item active" data-page="dashboard" onclick="goPage('dashboard')">
+      <i class="fa-solid fa-chart-pie"></i> Dashboard
+    </div>
+    <div class="nav-item" data-page="my-markets" onclick="goPage('my-markets')">
+      <i class="fa-solid fa-shop"></i> Chợ của tôi
+    </div>
+
+    <div class="nav-group-label">Quản lý sạp</div>
+    <div class="nav-item" data-page="stalls" onclick="goPage('stalls')">
+      <i class="fa-solid fa-border-all"></i> Sạp / Gian hàng
+    </div>
+    <div class="nav-item" data-page="traders" onclick="goPage('traders')">
+      <i class="fa-solid fa-users"></i> Tiểu thương
+    </div>
+
+    <div class="nav-group-label">Hợp đồng</div>
+    <div class="nav-item" data-page="contracts" onclick="goPage('contracts')">
+      <i class="fa-solid fa-file-contract"></i> Hợp đồng
+    </div>
+    <div class="nav-item" data-page="stall-requests" onclick="goPage('stall-requests')">
+      <i class="fa-solid fa-door-open"></i> Yêu cầu thuê sạp
+      <span class="nav-badge" id="navSrBadge" style="display:none;"></span>
+    </div>
+    <div class="nav-item" data-page="renewal-requests" onclick="goPage('renewal-requests')">
+      <i class="fa-solid fa-rotate"></i> Yêu cầu gia hạn
+      <span class="nav-badge" id="navRrBadge" style="display:none;"></span>
+    </div>
+    <div class="nav-item" data-page="stall-feedback" onclick="goPage('stall-feedback')">
+      <i class="fa-solid fa-triangle-exclamation"></i> Phản ánh của sạp
+      <span class="nav-badge" id="navFbBadge" style="display:none;"></span>
+    </div>
+
+    <div class="nav-group-label">Sản phẩm & Đơn hàng</div>
+    <div class="nav-item" data-page="products" onclick="goPage('products')">
+      <i class="fa-solid fa-box-open"></i> Sản phẩm trong chợ
+    </div>
+
+    <div class="nav-group-label">Tài khoản</div>
+    <div class="nav-item" data-page="profile" onclick="goPage('profile')">
+      <i class="fa-solid fa-circle-user"></i> Hồ sơ cá nhân
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="mgr-avatar" id="mgrAvatar">MG</div>
+    <div>
+      <div class="mgr-name" id="mgrName">Quản lý chợ</div>
+      <div class="mgr-role">MANAGER · SmartMarket</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════ HEADER ══════════ -->
+<header class="header">
+  <button class="icon-btn" id="sidebarToggle" onclick="toggleSidebar()" style="display:none;border-radius:var(--radius-sm);">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <div class="header-title" id="headerTitle">Dashboard</div>
+  <div class="header-market-tag" id="headerMarketTag">—</div>
+  <div class="header-search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" placeholder="Tìm sạp, tiểu thương, sản phẩm...">
+  </div>
+  <div class="header-actions">
+    <div class="icon-btn" onclick="refreshCurrentPage()" title="Làm mới"><i class="fa-solid fa-arrows-rotate"></i></div>
+    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
+  </div>
+</header>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main">
+
+  <!-- ════ PAGE: DASHBOARD ════ -->
+  <div class="page active" id="page-dashboard">
+    <div class="welcome-banner">
+      <div class="wb-text">
+        <div class="wb-greeting">Chào mừng trở lại 👋</div>
+        <div class="wb-name" id="wbName">Quản lý chợ</div>
+        <div class="wb-role"><i class="fa-solid fa-shop"></i> <span id="wbMarket">—</span></div>
+      </div>
+      <div class="wb-actions">
+        <button class="wb-btn wb-btn-white" onclick="goPage('stall-requests')">
+          <i class="fa-solid fa-gavel"></i> Xét duyệt yêu cầu
+        </button>
+        <button class="wb-btn wb-btn-outline" onclick="goPage('contracts')">
+          <i class="fa-solid fa-file-contract"></i> Tạo hợp đồng
+        </button>
+      </div>
+    </div>
+
+    <!-- Pending alerts -->
+    <div id="dashAlerts"></div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="top"><span class="label">Tổng sạp</span><div class="icon-box ic-blue"><i class="fa-solid fa-border-all"></i></div></div>
+        <div class="value" id="d-stalls-total">—</div>
+        <div class="delta" id="d-stalls-sub"></div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Tiểu thương</span><div class="icon-box ic-green"><i class="fa-solid fa-users"></i></div></div>
+        <div class="value" id="d-traders">—</div>
+        <div class="delta"><i class="fa-solid fa-circle-info"></i> Đang hoạt động</div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Hợp đồng</span><div class="icon-box ic-purple"><i class="fa-solid fa-file-contract"></i></div></div>
+        <div class="value" id="d-contracts-total">—</div>
+        <div class="delta" id="d-contracts-sub"></div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Sản phẩm</span><div class="icon-box ic-amber"><i class="fa-solid fa-box-open"></i></div></div>
+        <div class="value" id="d-products">—</div>
+        <div class="delta"><i class="fa-solid fa-circle-info"></i> Đang bán trong chợ</div>
+      </div>
+    </div>
+
+    <!-- Stall occupancy chart -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Trạng thái sạp</div></div>
+          <button class="btn btn-outline btn-sm" onclick="goPage('stalls')">Xem chi tiết</button>
+        </div>
+        <div id="stallStatusChart"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Hợp đồng sắp hết hạn</div></div>
+        <div id="expiringContracts"></div>
+      </div>
+    </div>
+
+    <!-- Recent contracts -->
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Hợp đồng gần đây</div></div>
+        <button class="btn btn-outline btn-sm" onclick="goPage('contracts')">Xem tất cả</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mã HĐ</th><th>Cơ sở</th><th>Sạp</th><th>Bắt đầu</th><th>Kết thúc</th><th>Tiền thuê</th><th>Trạng thái</th></tr></thead>
+          <tbody id="d-recentContracts"><tr><td colspan="7" class="tc">Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE: MY MARKETS ════ -->
+  <div class="page" id="page-my-markets">
+    <div class="page-hdr">
+      <div><h1>Chợ của tôi</h1><p>Danh sách chợ bạn đang được phân công quản lý</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;" id="myMarketsGrid">
+      <div class="tc">Đang tải...</div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE: STALLS ════ -->
+  <div class="page" id="page-stalls">
+    <div class="page-hdr">
+      <div><h1>Sạp / Gian hàng</h1><p>Sạp thuộc chợ bạn quản lý</p></div>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="sFilterMarket" style="width:auto;min-width:180px;" onchange="renderStalls()"><option value="">Tất cả chợ</option></select>
+      <select class="form-control" id="sFilterStatus" style="width:auto;min-width:160px;" onchange="renderStalls()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="available">Trống</option>
+        <option value="rented">Đang thuê</option>
+        <option value="maintenance">Bảo trì</option>
+      </select>
+      <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input class="form-control" id="sSearch" placeholder="Tìm mã sạp..." oninput="renderStalls()"></div>
+      <span class="filter-count" id="sCount"></span>
+    </div>
+    <div class="stall-grid" id="stallGrid"><div class="tc">Đang tải...</div></div>
+    <div class="pagination" id="stallPagination"></div>
+  </div>
+
+  <!-- ════ PAGE: TRADERS ════ -->
+  <div class="page" id="page-traders">
+    <div class="page-hdr">
+      <div><h1>Tiểu thương</h1><p>Tiểu thương thuộc chợ bạn quản lý</p></div>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="tFilterMarket" style="width:auto;min-width:180px;" onchange="renderTraders()"><option value="">Tất cả chợ</option></select>
+      <select class="form-control" id="tFilterStatus" style="width:auto;min-width:160px;" onchange="renderTraders()">
+        <option value="">Tất cả trạng thái</option><option value="ACTIVE">Hoạt động</option><option value="INACTIVE">Tạm khóa</option>
+      </select>
+      <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input class="form-control" id="tSearch" placeholder="Tìm tên, SĐT, cơ sở..." oninput="renderTraders()"></div>
+      <span class="filter-count" id="tCount"></span>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Họ tên</th><th>Số điện thoại</th><th>Email</th><th>Tên cơ sở</th><th>Mã số thuế</th><th>Chợ</th><th>Trạng thái</th></tr></thead>
+          <tbody id="traderTable"><tr><td colspan="7" class="tc">Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="traderPagination"></div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE: CONTRACTS ════ -->
+  <div class="page" id="page-contracts">
+    <div class="page-hdr">
+      <div><h1>Hợp đồng</h1><p>Hợp đồng thuê sạp trong chợ bạn quản lý</p></div>
+      <div class="page-hdr-actions">
+        <button class="btn btn-primary" onclick="openAddContractModal()"><i class="fa-solid fa-plus"></i> Tạo hợp đồng</button>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="cFilterStatus" style="width:auto;min-width:180px;" onchange="renderContracts()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="active">Còn hiệu lực</option>
+        <option value="pending">Chờ ký</option>
+        <option value="expired">Đã hết hạn</option>
+      </select>
+      <select class="form-control" id="cFilterMarket" style="width:auto;min-width:180px;" onchange="renderContracts()"><option value="">Tất cả chợ</option></select>
+      <div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input class="form-control" id="cSearch" placeholder="Tìm cơ sở, sạp..." oninput="renderContracts()"></div>
+      <span class="filter-count" id="cCount"></span>
+    </div>
+    <div id="contractList"></div>
+    <div class="pagination" id="contractPagination"></div>
+  </div>
+
+  <!-- ════ PAGE: STALL REQUESTS ════ -->
+  <div class="page" id="page-stall-requests">
+    <div class="page-hdr">
+      <div><h1>Yêu cầu thuê sạp</h1><p>Yêu cầu đăng ký thuê sạp gửi từ tiểu thương</p></div>
+    </div>
+
+    <!-- Summary counts -->
+    <div class="stats-grid-3" style="margin-bottom:18px;">
+      <div class="stat-card" style="cursor:pointer;" onclick="setStallReqFilter('PENDING')">
+        <div class="top"><span class="label">Chờ duyệt</span><div class="icon-box ic-amber"><i class="fa-solid fa-clock"></i></div></div>
+        <div class="value" id="sr-pending">—</div>
+        <div class="delta"><i class="fa-solid fa-arrow-right"></i> Cần xử lý ngay</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;" onclick="setStallReqFilter('APPROVED')">
+        <div class="top"><span class="label">Đã duyệt</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div>
+        <div class="value" id="sr-approved">—</div>
+        <div class="delta"><i class="fa-solid fa-circle-info"></i> Tổng cộng</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;" onclick="setStallReqFilter('REJECTED')">
+        <div class="top"><span class="label">Đã từ chối</span><div class="icon-box ic-red"><i class="fa-solid fa-circle-xmark"></i></div></div>
+        <div class="value" id="sr-rejected">—</div>
+        <div class="delta"><i class="fa-solid fa-circle-info"></i> Tổng cộng</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <select class="form-control" id="srFilter" style="width:auto;min-width:180px;" onchange="renderStallRequests()">
+        <option value="">Tất cả</option>
+        <option value="PENDING">Chờ duyệt</option>
+        <option value="APPROVED">Đã duyệt</option>
+        <option value="REJECTED">Đã từ chối</option>
+      </select>
+      <span class="filter-count" id="srCount"></span>
+    </div>
+
+    <div id="stallRequestList"></div>
+    <div class="pagination" id="srPagination"></div>
+  </div>
+
+  <!-- ════ PAGE: RENEWAL REQUESTS ════ -->
+  <div class="page" id="page-renewal-requests">
+    <div class="page-hdr">
+      <div><h1>Yêu cầu gia hạn hợp đồng</h1><p>Yêu cầu gia hạn hợp đồng thuê sạp từ tiểu thương</p></div>
+    </div>
+
+    <div class="stats-grid-3" style="margin-bottom:18px;">
+      <div class="stat-card" style="cursor:pointer;" onclick="setRenewalFilter('PENDING')">
+        <div class="top"><span class="label">Chờ duyệt</span><div class="icon-box ic-amber"><i class="fa-solid fa-clock"></i></div></div>
+        <div class="value" id="rr-pending">—</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;" onclick="setRenewalFilter('APPROVED')">
+        <div class="top"><span class="label">Đã duyệt</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div>
+        <div class="value" id="rr-approved">—</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;" onclick="setRenewalFilter('REJECTED')">
+        <div class="top"><span class="label">Từ chối</span><div class="icon-box ic-red"><i class="fa-solid fa-circle-xmark"></i></div></div>
+        <div class="value" id="rr-rejected">—</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <select class="form-control" id="rrFilter" style="width:auto;min-width:180px;" onchange="renderRenewalRequests()">
+        <option value="">Tất cả</option>
+        <option value="PENDING">Chờ duyệt</option>
+        <option value="APPROVED">Đã duyệt</option>
+        <option value="REJECTED">Đã từ chối</option>
+      </select>
+      <span class="filter-count" id="rrCount"></span>
+    </div>
+
+    <div id="renewalRequestList"></div>
+    <div class="pagination" id="rrPagination"></div>
+  </div>
+
+  <!-- ════ PAGE: STALL FEEDBACK ════ -->
+  <div class="page" id="page-stall-feedback">
+    <div class="page-hdr">
+      <div><h1>Phản ánh của sạp</h1><p>Phản ánh từ tiểu thương và khách hàng — chỉ hiển thị các sạp thuộc chợ bạn quản lý</p></div>
+    </div>
+
+    <div class="stats-grid-3" style="margin-bottom:18px;">
+      <div class="stat-card" style="cursor:pointer;" onclick="setFeedbackFilter('PENDING')">
+        <div class="top"><span class="label">Chờ xử lý</span><div class="icon-box ic-amber"><i class="fa-solid fa-clock"></i></div></div>
+        <div class="value" id="fb-pending">—</div>
+        <div class="delta"><i class="fa-solid fa-arrow-right"></i> Cần xử lý ngay</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;" onclick="setFeedbackFilter('RESOLVED')">
+        <div class="top"><span class="label">Đã xử lý</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div>
+        <div class="value" id="fb-resolved">—</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;" onclick="setFeedbackFilter('REJECTED')">
+        <div class="top"><span class="label">Từ chối</span><div class="icon-box ic-red"><i class="fa-solid fa-circle-xmark"></i></div></div>
+        <div class="value" id="fb-rejected">—</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <select class="form-control" id="fbFilterType" style="width:auto;min-width:170px;" onchange="renderStallFeedback()">
+        <option value="">Tất cả người gửi</option>
+        <option value="TRADER">Tiểu thương</option>
+        <option value="CUSTOMER">Khách hàng</option>
+      </select>
+      <select class="form-control" id="fbFilter" style="width:auto;min-width:170px;" onchange="renderStallFeedback()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="PENDING">Chờ xử lý</option>
+        <option value="RESOLVED">Đã xử lý</option>
+        <option value="REJECTED">Từ chối</option>
+      </select>
+      <span class="filter-count" id="fbCount"></span>
+    </div>
+
+    <div id="feedbackList"></div>
+    <div class="pagination" id="fbPagination"></div>
+  </div>
+
+  <!-- ════ PAGE: PRODUCTS ════ -->
+  <div class="page" id="page-products">
+    <div class="page-hdr">
+      <div><h1>Sản phẩm trong chợ</h1><p>Tất cả sản phẩm đang được bán trong chợ bạn quản lý</p></div>
+    </div>
+    <div class="filter-bar">
+      <div class="search-wrap" style="flex:1;"><i class="fa-solid fa-magnifying-glass"></i><input class="form-control" id="pSearch" placeholder="Tìm tên sản phẩm, cơ sở..." oninput="renderProducts()"></div>
+      <span class="filter-count" id="pCount"></span>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tên sản phẩm</th><th>Giá</th><th>Cơ sở</th><th>Sạp</th><th>Chợ</th></tr></thead>
+          <tbody id="productTable"><tr><td colspan="5" class="tc">Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="productPagination"></div>
+    </div>
+  </div>
+
+  <!-- ════ PAGE: PROFILE ════ -->
+  <div class="page" id="page-profile">
+    <div class="page-hdr">
+      <div><h1>Hồ sơ cá nhân</h1><p>Thông tin tài khoản quản lý chợ</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+          <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--teal));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;flex-shrink:0;" id="profileAvatar">MG</div>
+          <div>
+            <div style="font-size:20px;font-weight:700;" id="profileName">—</div>
+            <div style="font-size:13px;color:var(--text3);margin-top:3px;">Quản lý chợ · SmartMarket</div>
+            <span class="badge badge-teal" style="margin-top:6px;"><i class="fa-solid fa-shop"></i> MANAGER</span>
+          </div>
+        </div>
+        <hr class="sep">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="dl">Tên đăng nhập</div><div class="dv" id="profileUsername">—</div></div>
+          <div class="detail-item"><div class="dl">Vai trò</div><div class="dv" id="profileRole">—</div></div>
+          <div class="detail-item"><div class="dl">Chợ quản lý</div><div class="dv" id="profileMarkets">—</div></div>
+          <div class="detail-item"><div class="dl">Trạng thái</div><div class="dv"><span class="badge badge-green">Đang hoạt động</span></div></div>
+        </div>
+      </div>
+
+      <!-- Danh sách chợ đang quản lý -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">Chợ được phân công</div></div>
+        <div id="profileMarketList"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Modal: Sửa sạp (chỉ area_m2, monthly_rent, status) -->
+<div class="modal-overlay" id="modalStall" onclick="closeModalOverlay(event,'modalStall')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Sửa thông tin sạp <span id="stallModalCode" style="color:var(--info);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalStall')">×</button>
+    </div>
+    <form id="formStall" onsubmit="submitStall(event)">
+      <input type="hidden" id="sId">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Diện tích (m²)</label>
+          <input class="form-control" id="sArea" type="number" step="0.01" min="0" placeholder="12">
+        </div>
+        <div class="form-group">
+          <label>Tiền thuê/tháng (đ)</label>
+          <input class="form-control" id="sRent" type="number" min="0" placeholder="2400000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Trạng thái</label>
+        <select class="form-control" id="sStatus">
+          <option value="available">Trống</option>
+          <option value="rented">Đang thuê</option>
+          <option value="maintenance">Bảo trì</option>
+        </select>
+      </div>
+      <div class="alert-box info" style="margin-top:12px;">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>Bạn chỉ có thể sửa diện tích, tiền thuê và trạng thái sạp. Mã sạp và khu vực do Admin quản lý.</span>
+      </div>
+      <div id="stallFormMsg" class="form-msg"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modalStall')">Hủy</button>
+        <button type="submit" class="btn btn-primary" id="stallSubmitBtn"><i class="fa-solid fa-floppy-disk"></i> Cập nhật sạp</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Tạo / Sửa hợp đồng -->
+<div class="modal-overlay" id="modalContract" onclick="closeModalOverlay(event,'modalContract')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="contractModalTitle">Tạo hợp đồng mới</div>
+      <button class="modal-close" onclick="closeModal('modalContract')">×</button>
+    </div>
+    <form id="formContract" onsubmit="submitContract(event)">
+      <input type="hidden" id="ctId">
+      <div class="form-group">
+        <label>Tiểu thương <span style="color:var(--danger)">*</span></label>
+        <select class="form-control" id="ctTraderId" required><option value="">— Chọn tiểu thương —</option></select>
+      </div>
+      <div class="form-group">
+        <label>Sạp <span style="color:var(--danger)">*</span></label>
+        <select class="form-control" id="ctStallId" required><option value="">— Chọn sạp —</option></select>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Ngày bắt đầu *</label><input class="form-control" id="ctStart" type="date" required></div>
+        <div class="form-group"><label>Ngày kết thúc *</label><input class="form-control" id="ctEnd" type="date" required></div>
+        <div class="form-group"><label>Tiền thuê/tháng (đ)</label><input class="form-control" id="ctRent" type="number" min="0" placeholder="2400000"></div>
+        <div class="form-group">
+          <label>Trạng thái</label>
+          <select class="form-control" id="ctStatus"><option value="active">Còn hiệu lực</option><option value="pending">Chờ ký</option><option value="expired">Đã hết hạn</option></select>
+        </div>
+      </div>
+      <div id="contractFormMsg" class="form-msg"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modalContract')">Hủy</button>
+        <button type="submit" class="btn btn-primary" id="contractSubmitBtn"><i class="fa-solid fa-floppy-disk"></i> Lưu hợp đồng</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Chi tiết hợp đồng -->
+<div class="modal-overlay" id="modalContractDetail" onclick="closeModalOverlay(event,'modalContractDetail')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Chi tiết hợp đồng <span id="cdId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalContractDetail')">×</button>
+    </div>
+    <div class="detail-grid" id="cdGrid" style="margin-bottom:16px;"></div>
+    <div id="cdAlert"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalContractDetail')">Đóng</button>
+      <button class="btn btn-primary" id="cdEditBtn"><i class="fa-solid fa-pen"></i> Chỉnh sửa</button>
+      <button class="btn btn-danger" id="cdDeleteBtn"><i class="fa-solid fa-trash"></i> Xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Xét duyệt yêu cầu thuê sạp -->
+<div class="modal-overlay" id="modalReviewStallReq" onclick="closeModalOverlay(event,'modalReviewStallReq')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Xét duyệt — Yêu cầu thuê sạp <span id="srReqId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalReviewStallReq')">×</button>
+    </div>
+    <div class="detail-grid" id="srDetailGrid" style="margin-bottom:16px;"></div>
+    <div class="form-group">
+      <label>Tiền thuê/tháng (đ) <span style="color:var(--text3);font-weight:400;"> — ghi đè nếu khác giá gốc</span></label>
+      <input class="form-control" id="srRentOverride" type="number" min="0" placeholder="Để trống = dùng giá gốc của sạp">
+    </div>
+    <div class="form-group">
+      <label>Ghi chú của Quản lý</label>
+      <textarea class="form-control" id="srAdminNote" placeholder="Lý do từ chối hoặc thông tin bổ sung..."></textarea>
+    </div>
+    <div id="srMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalReviewStallReq')">Đóng</button>
+      <button class="btn btn-danger" id="srRejectBtn" onclick="reviewStallRequest('reject')"><i class="fa-solid fa-xmark"></i> Từ chối</button>
+      <button class="btn btn-primary" id="srApproveBtn" onclick="reviewStallRequest('approve')"><i class="fa-solid fa-check"></i> Duyệt & Tạo HĐ</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Xét duyệt yêu cầu gia hạn -->
+<div class="modal-overlay" id="modalReviewRenewal" onclick="closeModalOverlay(event,'modalReviewRenewal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Xét duyệt — Gia hạn hợp đồng <span id="rrReqId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalReviewRenewal')">×</button>
+    </div>
+    <div class="detail-grid" id="rrDetailGrid" style="margin-bottom:16px;"></div>
+    <div class="form-group">
+      <label>Ghi chú của Quản lý</label>
+      <textarea class="form-control" id="rrAdminNote" placeholder="Lý do từ chối hoặc thông tin bổ sung..."></textarea>
+    </div>
+    <div id="rrMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalReviewRenewal')">Đóng</button>
+      <button class="btn btn-danger" id="rrRejectBtn" onclick="reviewRenewal('reject')"><i class="fa-solid fa-xmark"></i> Từ chối</button>
+      <button class="btn btn-primary" id="rrApproveBtn" onclick="reviewRenewal('approve')"><i class="fa-solid fa-check"></i> Duyệt gia hạn</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Xử lý phản ánh của sạp -->
+<div class="modal-overlay" id="modalReviewFeedback" onclick="closeModalOverlay(event,'modalReviewFeedback')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Xử lý phản ánh <span id="fbReqId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalReviewFeedback')">×</button>
+    </div>
+    <div class="detail-grid" id="fbDetailGrid" style="margin-bottom:16px;"></div>
+    <div class="form-group">
+      <label>Ghi chú của Quản lý</label>
+      <textarea class="form-control" id="fbAdminNote" placeholder="Cách xử lý hoặc lý do từ chối..."></textarea>
+    </div>
+    <div id="fbMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalReviewFeedback')">Đóng</button>
+      <button class="btn btn-danger" id="fbRejectBtn" onclick="reviewStallFeedback('reject')"><i class="fa-solid fa-xmark"></i> Từ chối / Không hợp lệ</button>
+      <button class="btn btn-primary" id="fbResolveBtn" onclick="reviewStallFeedback('resolve')"><i class="fa-solid fa-check"></i> Đánh dấu đã xử lý</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Xác nhận xóa -->
+<div class="modal-overlay" id="modalDelete" onclick="closeModalOverlay(event,'modalDelete')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="delTitle">Xác nhận xóa</div>
+      <button class="modal-close" onclick="closeModal('modalDelete')">×</button>
+    </div>
+    <div style="background:var(--danger-pale);border:1px solid #f4cfca;border-radius:var(--radius-sm);padding:14px;display:flex;gap:12px;align-items:flex-start;">
+      <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);font-size:18px;flex-shrink:0;margin-top:1px;"></i>
+      <div>
+        <div style="font-weight:600;color:var(--danger);margin-bottom:4px;">Hành động không thể hoàn tác</div>
+        <div style="font-size:13px;color:var(--text2);">Xóa <span id="delLabel">mục</span> <strong id="delName">—</strong>?</div>
+      </div>
+    </div>
+    <div id="delMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalDelete')">Hủy</button>
+      <button class="btn btn-danger" id="delConfirmBtn" onclick="confirmDelete()"><i class="fa-solid fa-trash"></i> Xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="../js/manager.js"></script>
+</body>
+</html>

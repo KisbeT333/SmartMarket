@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartMarket — Cổng Tiểu thương</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/trader.css">
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Smart<span>Market</span></div>
+    <div class="sub">Cổng tiểu thương</div>
+    <div class="portal-tag">Tiểu thương</div>
+  </div>
+
+  <div class="sidebar-trader-card">
+    <div class="sidebar-trader-avatar" id="sidebarAvatar">TT</div>
+    <div>
+      <div class="sidebar-trader-name" id="sidebarName">Đang tải...</div>
+      <div class="sidebar-trader-biz" id="sidebarBiz">—</div>
+    </div>
+  </div>
+
+  <nav class="nav-section">
+    <div class="nav-group-label">Tổng quan</div>
+    <div class="nav-item active" data-page="home" onclick="goPage('home')">
+      <i class="fa-solid fa-house"></i> Trang chủ
+    </div>
+
+    <div class="nav-group-label">Sạp & Hợp đồng</div>
+    <div class="nav-item" data-page="my-contracts" onclick="goPage('my-contracts')">
+      <i class="fa-solid fa-file-contract"></i> Hợp đồng của tôi
+      <span class="nav-badge-amber" id="navContractBadge" style="display:none;"></span>
+      <span class="nav-badge" id="navOverdueBadge" style="display:none;" title="Kỳ thanh toán quá hạn"></span>
+    </div>
+    <div class="nav-item" data-page="browse-stalls" onclick="goPage('browse-stalls')">
+      <i class="fa-solid fa-border-all"></i> Xem sạp trống
+    </div>
+    <div class="nav-item" data-page="stall-requests" onclick="goPage('stall-requests')">
+      <i class="fa-solid fa-door-open"></i> Yêu cầu thuê sạp
+      <span class="nav-badge" id="navSrBadge" style="display:none;"></span>
+    </div>
+    <div class="nav-item" data-page="renewal-requests" onclick="goPage('renewal-requests')">
+      <i class="fa-solid fa-rotate"></i> Yêu cầu gia hạn
+      <span class="nav-badge" id="navRrBadge" style="display:none;"></span>
+    </div>
+    <div class="nav-item" data-page="stall-feedback" onclick="goPage('stall-feedback')">
+      <i class="fa-solid fa-triangle-exclamation"></i> Phản ánh sạp
+      <span class="nav-badge" id="navFbBadge" style="display:none;"></span>
+    </div>
+
+    <div class="nav-item" data-page="my-payments" onclick="goPage('my-payments')">
+      <i class="fa-solid fa-file-invoice-dollar"></i> Hóa đơn & Thanh toán
+      <span class="nav-badge-amber" id="navPayBadge" style="display:none;"></span>
+    </div>
+
+    <div class="nav-group-label">Kinh doanh</div>
+    <div class="nav-item" data-page="my-products" onclick="goPage('my-products')">
+      <i class="fa-solid fa-box-open"></i> Sản phẩm của tôi
+    </div>
+    <div class="nav-item" data-page="my-orders" onclick="goPage('my-orders')">
+      <i class="fa-solid fa-receipt"></i> Đơn hàng
+    </div>
+
+    <div class="nav-group-label">Tài khoản</div>
+    <div class="nav-item" data-page="profile" onclick="goPage('profile')">
+      <i class="fa-solid fa-circle-user"></i> Hồ sơ cá nhân
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="logout-side" onclick="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════ HEADER ══════════ -->
+<header class="header">
+  <button class="notif-btn" id="sidebarToggle" onclick="toggleSidebar()" style="display:none;border-radius:var(--radius-sm);" title="Menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <div class="header-title" id="headerTitle">Trang chủ</div>
+  <div class="header-search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" placeholder="Tìm sạp, sản phẩm..." id="globalSearchInput">
+  </div>
+  <div class="header-actions">
+    <div class="notif-btn" onclick="goPage('profile')" title="Hồ sơ" id="headerAvatar" style="font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-pale);border-color:var(--primary);">TT</div>
+  </div>
+</header>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main">
+
+  <!-- ════ HOME ════ -->
+  <div class="page active" id="page-home">
+    <div class="welcome-banner">
+      <div class="wb-text">
+        <div class="wb-greeting">Chào mừng trở lại 👋</div>
+        <div class="wb-name" id="wbName">Đang tải...</div>
+        <div class="wb-biz"><i class="fa-solid fa-store"></i> <span id="wbBiz">—</span></div>
+      </div>
+      <div class="wb-actions">
+        <button class="wb-btn wb-btn-white" onclick="goPage('browse-stalls')">
+          <i class="fa-solid fa-border-all"></i> Xem sạp trống
+        </button>
+        <button class="wb-btn wb-btn-outline" onclick="goPage('my-products')">
+          <i class="fa-solid fa-box-open"></i> Quản lý sản phẩm
+        </button>
+      </div>
+    </div>
+
+    <!-- Alerts: hợp đồng sắp hết hạn -->
+    <div id="homeAlerts"></div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="top"><span class="label">Hợp đồng đang có</span><div class="icon-box ic-green"><i class="fa-solid fa-file-contract"></i></div></div>
+        <div class="value" id="h-contracts">—</div>
+        <div class="sub-value"><i class="fa-solid fa-circle-info"></i> Còn hiệu lực</div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Sản phẩm</span><div class="icon-box ic-blue"><i class="fa-solid fa-box-open"></i></div></div>
+        <div class="value" id="h-products">—</div>
+        <div class="sub-value"><i class="fa-solid fa-circle-info"></i> Đang bán</div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Đơn hàng</span><div class="icon-box ic-amber"><i class="fa-solid fa-receipt"></i></div></div>
+        <div class="value" id="h-orders">—</div>
+        <div class="sub-value"><i class="fa-solid fa-circle-info"></i> Tổng đơn nhận</div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">YC chờ duyệt</span><div class="icon-box ic-red"><i class="fa-solid fa-clock"></i></div></div>
+        <div class="value" id="h-pending">—</div>
+        <div class="sub-value"><i class="fa-solid fa-circle-info"></i> Thuê sạp + gia hạn</div>
+      </div>
+    </div>
+
+    <!-- 2 column: hợp đồng + đơn hàng gần đây -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Hợp đồng của tôi</div><div class="card-subtitle">Sạp đang thuê</div></div>
+          <button class="btn btn-outline btn-sm" onclick="goPage('my-contracts')">Xem tất cả</button>
+        </div>
+        <div id="homeContractList"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Đơn hàng gần đây</div></div>
+          <button class="btn btn-outline btn-sm" onclick="goPage('my-orders')">Xem tất cả</button>
+        </div>
+        <div id="homeOrderList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ MY CONTRACTS ════ -->
+  <div class="page" id="page-my-contracts">
+    <div class="page-hdr">
+      <div><h1>Hợp đồng của tôi</h1><p>Danh sách sạp bạn đang thuê</p></div>
+      <button class="btn btn-teal" onclick="goPage('browse-stalls')">
+        <i class="fa-solid fa-plus"></i> Đăng ký thêm sạp
+      </button>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="ctFilterStatus" style="width:auto;min-width:180px;" onchange="renderMyContracts()">
+        <option value="">Tất cả trạng thái</option>
+        <option value="active">Còn hiệu lực</option>
+        <option value="pending">Chờ ký</option>
+        <option value="expired">Đã hết hạn</option>
+      </select>
+      <span class="filter-count" id="ctCount"></span>
+    </div>
+    <div id="myContractList"></div>
+    <div class="pagination" id="ctPagination"></div>
+  </div>
+
+  <!-- ════ BROWSE STALLS ════ -->
+  <div class="page" id="page-browse-stalls">
+    <div class="page-hdr">
+      <div><h1>Xem sạp trống</h1><p>Chọn chợ để xem danh sách sạp còn trống</p></div>
+    </div>
+
+    <!-- Chọn chợ trước -->
+    <div class="card mb-14">
+      <div class="card-header"><div class="card-title">Chọn chợ muốn xem</div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <select class="form-control" id="browseMarketSelect" style="max-width:300px;" onchange="loadAvailableStalls()">
+          <option value="">— Chọn chợ —</option>
+        </select>
+        <button class="btn btn-outline btn-sm" onclick="loadAvailableStalls()"><i class="fa-solid fa-arrows-rotate"></i> Làm mới</button>
+        <span class="filter-count" id="browseCount"></span>
+      </div>
+    </div>
+
+    <div class="filter-bar" id="browseFilterBar" style="display:none;">
+      <div class="search-wrap" style="flex:1;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="form-control" id="browseSearch" type="text" placeholder="Tìm mã sạp, khu..." oninput="renderBrowseStalls()">
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--text2);">
+        Giá từ: <input class="form-control" id="browseRentMin" type="number" style="width:110px;" placeholder="đ" oninput="renderBrowseStalls()">
+        → <input class="form-control" id="browseRentMax" type="number" style="width:110px;" placeholder="đ" oninput="renderBrowseStalls()">
+      </div>
+    </div>
+
+    <div class="stall-browse-grid" id="browseStallGrid">
+      <div class="empty-state"><i class="fa-solid fa-arrow-up"></i><div class="empty-title">Chọn chợ để xem sạp trống</div></div>
+    </div>
+    <div class="pagination" id="browsePagination"></div>
+  </div>
+
+  <!-- ════ STALL REQUESTS ════ -->
+  <div class="page" id="page-stall-requests">
+    <div class="page-hdr">
+      <div><h1>Yêu cầu thuê sạp</h1><p>Lịch sử các yêu cầu đăng ký thuê sạp bạn đã gửi</p></div>
+    </div>
+    <div class="stats-grid-3" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="top"><span class="label">Chờ duyệt</span><div class="icon-box ic-amber"><i class="fa-solid fa-clock"></i></div></div><div class="value" id="sr-pending">—</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Đã duyệt</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div><div class="value" id="sr-approved">—</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Từ chối</span><div class="icon-box ic-red"><i class="fa-solid fa-circle-xmark"></i></div></div><div class="value" id="sr-rejected">—</div></div>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="srFilter" style="width:auto;min-width:180px;" onchange="renderStallRequests()">
+        <option value="">Tất cả</option>
+        <option value="PENDING">Chờ duyệt</option>
+        <option value="APPROVED">Đã duyệt</option>
+        <option value="REJECTED">Từ chối</option>
+      </select>
+      <span class="filter-count" id="srCount"></span>
+    </div>
+    <div id="stallRequestList"></div>
+    <div class="pagination" id="srPagination"></div>
+  </div>
+
+  <!-- ════ RENEWAL REQUESTS ════ -->
+  <div class="page" id="page-renewal-requests">
+    <div class="page-hdr">
+      <div><h1>Yêu cầu gia hạn hợp đồng</h1><p>Lịch sử yêu cầu gia hạn hợp đồng thuê sạp</p></div>
+    </div>
+    <div class="stats-grid-3" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="top"><span class="label">Chờ duyệt</span><div class="icon-box ic-amber"><i class="fa-solid fa-clock"></i></div></div><div class="value" id="rr-pending">—</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Đã duyệt</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div><div class="value" id="rr-approved">—</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Từ chối</span><div class="icon-box ic-red"><i class="fa-solid fa-circle-xmark"></i></div></div><div class="value" id="rr-rejected">—</div></div>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="rrFilter" style="width:auto;min-width:180px;" onchange="renderRenewalRequests()">
+        <option value="">Tất cả</option>
+        <option value="PENDING">Chờ duyệt</option>
+        <option value="APPROVED">Đã duyệt</option>
+        <option value="REJECTED">Từ chối</option>
+      </select>
+      <span class="filter-count" id="rrCount"></span>
+    </div>
+    <div id="renewalList"></div>
+    <div class="pagination" id="rrPagination"></div>
+  </div>
+
+  <!-- ════ STALL FEEDBACK ════ -->
+  <div class="page" id="page-stall-feedback">
+    <div class="page-hdr">
+      <div><h1>Phản ánh sạp</h1><p>Gửi phản ánh sự cố, khiếu nại về sạp bạn đang thuê tới ban quản lý</p></div>
+      <button class="btn btn-teal" onclick="openSendFeedbackModal()"><i class="fa-solid fa-plus"></i> Gửi phản ánh mới</button>
+    </div>
+    <div class="stats-grid-3" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="top"><span class="label">Chờ xử lý</span><div class="icon-box ic-amber"><i class="fa-solid fa-clock"></i></div></div><div class="value" id="fb-pending">—</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Đã xử lý</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div><div class="value" id="fb-resolved">—</div></div>
+      <div class="stat-card"><div class="top"><span class="label">Từ chối</span><div class="icon-box ic-red"><i class="fa-solid fa-circle-xmark"></i></div></div><div class="value" id="fb-rejected">—</div></div>
+    </div>
+    <div class="filter-bar">
+      <select class="form-control" id="fbFilter" style="width:auto;min-width:180px;" onchange="renderMyFeedback()">
+        <option value="">Tất cả</option>
+        <option value="PENDING">Chờ xử lý</option>
+        <option value="RESOLVED">Đã xử lý</option>
+        <option value="REJECTED">Từ chối</option>
+      </select>
+      <span class="filter-count" id="fbCount"></span>
+    </div>
+    <div id="feedbackList"></div>
+    <div class="pagination" id="fbPagination"></div>
+  </div>
+
+  <!-- ════ MY PRODUCTS ════ -->
+  <div class="page" id="page-my-products">
+    <div class="page-hdr">
+      <div><h1>Sản phẩm của tôi</h1><p>Quản lý sản phẩm đang bán tại sạp</p></div>
+      <button class="btn btn-primary" onclick="openAddProductModal()">
+        <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+      </button>
+    </div>
+    <div class="filter-bar">
+      <div class="search-wrap" style="flex:1;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="form-control" id="pSearch" placeholder="Tìm tên sản phẩm..." oninput="renderProducts()">
+      </div>
+      <span class="filter-count" id="pCount"></span>
+    </div>
+    <div id="productGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;"></div>
+    <div class="pagination" id="pPagination"></div>
+  </div>
+
+  <!-- ════ MY ORDERS ════ -->
+  <div class="page" id="page-my-orders">
+    <div class="page-hdr">
+      <div><h1>Đơn hàng</h1><p>Các đơn hàng khách đặt từ sạp của bạn</p></div>
+    </div>
+    <div class="filter-bar">
+      <div class="search-wrap" style="flex:1;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="form-control" id="oSearch" placeholder="Tìm mã đơn, khách hàng..." oninput="renderOrders()">
+      </div>
+      <span class="filter-count" id="oCount"></span>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>SĐT khách</th><th>Tổng tiền</th><th>Ngày đặt</th><th>Thao tác</th></tr></thead>
+          <tbody id="orderTable"><tr><td colspan="6" class="tc">Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="oPagination"></div>
+    </div>
+  </div>
+
+  <!-- ════ MY PAYMENTS ════ -->
+  <div class="page" id="page-my-payments">
+    <div class="page-hdr">
+      <div><h1>Hóa đơn & Thanh toán</h1><p>Quản lý hóa đơn thuê sạp và lịch sử thanh toán</p></div>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="stats-grid-3" style="margin-bottom:16px;">
+      <div class="stat-card">
+        <div class="top"><span class="label">Chưa thanh toán</span><div class="icon-box ic-red"><i class="fa-solid fa-file-invoice"></i></div></div>
+        <div class="value" id="pay-unpaid-count">—</div>
+        <div class="sub-value" id="pay-unpaid-amount" style="font-weight:700;color:var(--danger);"></div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Đã thanh toán</span><div class="icon-box ic-green"><i class="fa-solid fa-circle-check"></i></div></div>
+        <div class="value" id="pay-paid-count">—</div>
+        <div class="sub-value" id="pay-paid-amount" style="font-weight:700;color:var(--primary);"></div>
+      </div>
+      <div class="stat-card">
+        <div class="top"><span class="label">Tổng hóa đơn</span><div class="icon-box ic-blue"><i class="fa-solid fa-receipt"></i></div></div>
+        <div class="value" id="pay-total-count">—</div>
+        <div class="sub-value" id="pay-total-amount" style="font-weight:700;"></div>
+      </div>
+    </div>
+
+    <!-- Tabs: Hóa đơn / Lịch sử -->
+    <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:2px solid var(--border);">
+      <button class="pay-tab active" id="tabInvoices" onclick="switchPayTab('invoices')">
+        <i class="fa-solid fa-file-invoice"></i> Hóa đơn thuê sạp
+      </button>
+      <button class="pay-tab" id="tabHistory" onclick="switchPayTab('history')">
+        <i class="fa-solid fa-clock-rotate-left"></i> Lịch sử thanh toán
+      </button>
+    </div>
+
+    <!-- Tab: Hóa đơn -->
+    <div id="payTabInvoices">
+      <div class="filter-bar">
+        <select class="form-control" id="invoiceFilter" style="width:auto;min-width:180px;" onchange="renderInvoices()">
+          <option value="">Tất cả</option>
+          <option value="UNPAID">Chưa thanh toán</option>
+          <option value="OVERDUE">Quá hạn</option>
+          <option value="PAID">Đã thanh toán</option>
+        </select>
+        <span class="filter-count" id="invCount"></span>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã HĐ</th>
+                <th>Sạp</th>
+                <th>Chợ</th>
+                <th>Tiền thuê/tháng</th>
+                <th>Số tiền</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="invoiceTable"><tr><td colspan="8" class="tc">Đang tải...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="invPagination"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Lịch sử -->
+    <div id="payTabHistory" style="display:none;">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã TT</th>
+                <th>Hóa đơn</th>
+                <th>Sạp</th>
+                <th>Chợ</th>
+                <th>Số tiền</th>
+                <th>Phương thức</th>
+                <th>Ngày thanh toán</th>
+              </tr>
+            </thead>
+            <tbody id="payHistoryTable"><tr><td colspan="7" class="tc">Đang tải...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="payHistPagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ PROFILE ════ -->
+  <div class="page" id="page-profile">
+    <div class="page-hdr">
+      <div><h1>Hồ sơ cá nhân</h1><p>Thông tin tài khoản tiểu thương</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+          <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--primary));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;flex-shrink:0;" id="profileAvatar">TT</div>
+          <div>
+            <div style="font-size:20px;font-weight:700;" id="profileName">—</div>
+            <div style="font-size:13px;color:var(--text3);margin-top:3px;" id="profileBiz">—</div>
+            <span class="badge badge-teal" style="margin-top:6px;"><i class="fa-solid fa-store"></i> Tiểu thương</span>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin-bottom:16px;">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="dl">Số điện thoại</div><div class="dv" id="profilePhone">—</div></div>
+          <div class="detail-item"><div class="dl">Email</div><div class="dv" id="profileEmail">—</div></div>
+          <div class="detail-item"><div class="dl">Tên đăng nhập</div><div class="dv" id="profileUsername">—</div></div>
+          <div class="detail-item"><div class="dl">Mã số thuế</div><div class="dv" id="profileTaxCode">—</div></div>
+          <div class="detail-item"><div class="dl">Chợ</div><div class="dv" id="profileMarket">—</div></div>
+          <div class="detail-item"><div class="dl">Trạng thái</div><div class="dv" id="profileStatus">—</div></div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn btn-primary" onclick="openEditProfileModal()"><i class="fa-solid fa-pen"></i> Chỉnh sửa hồ sơ</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Đổi mật khẩu</div></div>
+        <div class="form-group">
+          <label>Mật khẩu hiện tại</label>
+          <div class="password-wrap">
+            <input class="form-control" type="password" id="pwdCurrent" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePwd('pwdCurrent','pwdCurrentIcon')"><i class="fa-solid fa-eye" id="pwdCurrentIcon"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu mới</label>
+          <div class="password-wrap">
+            <input class="form-control" type="password" id="pwdNew" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePwd('pwdNew','pwdNewIcon')"><i class="fa-solid fa-eye" id="pwdNewIcon"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Xác nhận mật khẩu mới</label>
+          <input class="form-control" type="password" id="pwdConfirm" placeholder="••••••••">
+        </div>
+        <div id="pwdMsg" class="form-msg"></div>
+        <div style="margin-top:6px;">
+          <button class="btn btn-primary" onclick="changePassword()"><i class="fa-solid fa-lock"></i> Đổi mật khẩu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Modal: Thanh toán hóa đơn (2-step: chọn PT → QR/hướng dẫn) -->
+<div class="modal-overlay" id="modalPay" onclick="closeModalOverlay(event,'modalPay')">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-money-bill-wave"></i> Thanh toán <span id="payInvId" style="color:var(--text3);font-weight:400;font-size:14px;"></span></div>
+      <button class="modal-close" onclick="closePayModal()">×</button>
+    </div>
+
+    <!-- Thông tin hóa đơn -->
+    <div class="detail-grid" id="payInvDetail" style="margin-bottom:16px;"></div>
+
+    <!-- Step dots -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+      <div id="stepDot1" class="step-dot active">1</div>
+      <div style="flex:1;height:2px;background:var(--border);border-radius:2px;"></div>
+      <div id="stepDot2" class="step-dot">2</div>
+    </div>
+
+    <!-- STEP 1: Chọn phương thức -->
+    <div id="payStep1">
+      <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px;">Chọn phương thức thanh toán</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button class="pay-method-btn" onclick="selectAndNext('CASH')">
+          <i class="fa-solid fa-money-bills" style="font-size:24px;color:var(--primary);"></i>
+          <span>Tiền mặt</span>
+        </button>
+        <button class="pay-method-btn" onclick="selectAndNext('BANK_TRANSFER')">
+          <i class="fa-solid fa-building-columns" style="font-size:24px;color:#1e6fa8;"></i>
+          <span>Chuyển khoản</span>
+        </button>
+        <button class="pay-method-btn" onclick="selectAndNext('MOMO')">
+          <i class="fa-solid fa-mobile-screen" style="font-size:24px;color:#a01f8c;"></i>
+          <span>MoMo</span>
+        </button>
+        <button class="pay-method-btn" onclick="selectAndNext('VNPAY')">
+          <i class="fa-solid fa-credit-card" style="font-size:24px;color:#e53935;"></i>
+          <span>VNPay</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: QR / Hướng dẫn -->
+    <div id="payStep2" style="display:none;">
+      <div id="payQrSummary" style="margin-bottom:14px;"></div>
+      <div id="payQrZone" style="display:flex;justify-content:center;margin-bottom:12px;"></div>
+
+      <!-- Thông tin tài khoản (hiện khi chuyển khoản / momo) -->
+      <div id="payBankInfo" style="display:none;margin-bottom:12px;">
+        <div style="font-size:11.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Thông tin tài khoản</div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;display:grid;gap:7px;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text3);">Ngân hàng</span>
+            <span style="font-weight:600;" id="bib-bank">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text3);">Số tài khoản</span>
+            <span style="font-weight:700;cursor:pointer;color:var(--info);" id="bib-account" onclick="copyText('bib-account')" title="Nhấn để copy">— <i class="fa-regular fa-copy" style="font-size:11px;"></i></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text3);">Tên tài khoản</span>
+            <span id="bib-name">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text3);">Số tiền</span>
+            <span style="font-weight:700;color:var(--danger);" id="bib-amount">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+            <span style="color:var(--text3);white-space:nowrap;">Nội dung CK</span>
+            <span style="font-weight:700;cursor:pointer;color:var(--info);text-align:right;" id="bib-desc" onclick="copyText('bib-desc')" title="Nhấn để copy">— <i class="fa-regular fa-copy" style="font-size:11px;"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="payQrGuide" style="margin-bottom:10px;"></div>
+
+      <!-- Countdown -->
+      <div id="payCountdownWrap" style="display:none;align-items:center;gap:8px;font-size:13px;color:var(--text3);margin-bottom:6px;">
+        <i class="fa-solid fa-clock"></i>
+        Mã QR hết hạn sau: <strong id="payCountdown" style="color:var(--primary);font-size:15px;">10:00</strong>
+      </div>
+    </div>
+
+    <div id="payMsg" class="form-msg"></div>
+
+    <!-- Footer step 1: chỉ nút Hủy -->
+    <div class="modal-footer" id="payStep1Footer">
+      <button class="btn btn-outline" onclick="closePayModal()">Hủy</button>
+    </div>
+    <!-- Footer step 2: Quay lại + Xác nhận -->
+    <div class="modal-footer" id="payStep2Footer" style="display:none;justify-content:space-between;">
+      <button class="btn btn-outline" onclick="goPayStep1()"><i class="fa-solid fa-arrow-left"></i> Quay lại</button>
+      <button class="btn btn-primary" id="paySubmitBtn" onclick="submitPayment()">
+        <i class="fa-solid fa-circle-check"></i> Tôi đã thanh toán
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal: Chi tiết hóa đơn -->
+<div class="modal-overlay" id="modalInvDetail" onclick="closeModalOverlay(event,'modalInvDetail')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Chi tiết hóa đơn <span id="invDetailId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalInvDetail')">×</button>
+    </div>
+    <div class="detail-grid" id="invDetailGrid" style="margin-bottom:16px;"></div>
+    <div class="card-title" style="margin-bottom:10px;font-size:13px;font-weight:700;">Lịch sử thanh toán</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mã TT</th><th>Số tiền</th><th>Phương thức</th><th>Ngày thanh toán</th></tr></thead>
+        <tbody id="invDetailPayments"><tr><td colspan="4" class="tc">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalInvDetail')">Đóng</button>
+      <button class="btn btn-teal" id="invDetailPayBtn" style="display:none;" onclick="openPayModal(currentInvId)">
+        <i class="fa-solid fa-money-bill-wave"></i> Thanh toán ngay
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Chi tiết sạp trống + đăng ký -->
+<div class="modal-overlay" id="modalStallDetail" onclick="closeModalOverlay(event,'modalStallDetail')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Chi tiết sạp <span id="sdCode" style="color:var(--info);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalStallDetail')">×</button>
+    </div>
+    <div class="detail-grid" id="sdGrid" style="margin-bottom:16px;"></div>
+    <div class="alert-box alert-info">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Sạp này hiện đang trống. Bạn có thể gửi yêu cầu đăng ký thuê — ban quản lý sẽ xem xét trong 1–3 ngày.</span>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalStallDetail')">Đóng</button>
+      <button class="btn btn-teal" id="sdRegisterBtn"><i class="fa-solid fa-file-signature"></i> Đăng ký thuê sạp này</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Đăng ký thuê sạp (Wizard) -->
+<div class="modal-overlay" id="modalRegisterStall" onclick="closeModalOverlay(event,'modalRegisterStall')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Đăng ký thuê sạp <span id="regStallCode" style="color:var(--teal);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalRegisterStall')">×</button>
+    </div>
+    <div class="detail-grid" id="regStallPreview" style="margin-bottom:16px;"></div>
+    <div class="form-group">
+      <label>Ngày bắt đầu mong muốn <span style="color:var(--danger)">*</span></label>
+      <input class="form-control" type="date" id="regStartDate" required>
+    </div>
+    <div class="form-group">
+      <label>Ngày kết thúc mong muốn <span style="color:var(--danger)">*</span></label>
+      <input class="form-control" type="date" id="regEndDate" required>
+    </div>
+    <div class="form-group">
+      <label>Ghi chú / Yêu cầu thêm</label>
+      <textarea class="form-control" id="regNote" placeholder="Loại hàng hoá, yêu cầu đặc biệt..."></textarea>
+    </div>
+    <div id="regMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalRegisterStall')">Hủy</button>
+      <button class="btn btn-teal" id="regSubmitBtn" onclick="submitStallRequest()">
+        <i class="fa-solid fa-paper-plane"></i> Gửi yêu cầu
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Xem chi tiết hợp đồng + Yêu cầu gia hạn -->
+<div class="modal-overlay" id="modalContractDetail" onclick="closeModalOverlay(event,'modalContractDetail')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Hợp đồng <span id="cdId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalContractDetail')">×</button>
+    </div>
+    <div class="detail-grid" id="cdGrid" style="margin-bottom:16px;"></div>
+    <div id="cdAlert"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalContractDetail')">Đóng</button>
+      <button class="btn btn-primary" id="cdRenewBtn"><i class="fa-solid fa-rotate"></i> Yêu cầu gia hạn</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Yêu cầu gia hạn hợp đồng -->
+<div class="modal-overlay" id="modalRenew" onclick="closeModalOverlay(event,'modalRenew')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Yêu cầu gia hạn HĐ <span id="renewContractId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalRenew')">×</button>
+    </div>
+    <div class="alert-box alert-info" style="margin-bottom:14px;">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Yêu cầu sẽ được gửi đến ban quản lý để xét duyệt. Bạn sẽ nhận kết quả trong 1–3 ngày làm việc.</span>
+    </div>
+    <div class="form-group">
+      <label>Ngày kết thúc mới mong muốn <span style="color:var(--danger)">*</span></label>
+      <input class="form-control" type="date" id="renewEndDate" required>
+    </div>
+    <div class="form-group">
+      <label>Đề xuất tiền thuê mới/tháng (đ) <span style="color:var(--text3);font-weight:400;"> — tùy chọn</span></label>
+      <input class="form-control" type="number" id="renewRent" min="0" placeholder="Để trống = giữ nguyên giá hiện tại">
+    </div>
+    <div class="form-group">
+      <label>Ghi chú</label>
+      <textarea class="form-control" id="renewNote" placeholder="Lý do gia hạn, yêu cầu thêm..."></textarea>
+    </div>
+    <div id="renewMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalRenew')">Hủy</button>
+      <button class="btn btn-primary" id="renewSubmitBtn" onclick="submitRenewal()">
+        <i class="fa-solid fa-paper-plane"></i> Gửi yêu cầu gia hạn
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Gửi phản ánh sạp -->
+<div class="modal-overlay" id="modalSendFeedback" onclick="closeModalOverlay(event,'modalSendFeedback')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Gửi phản ánh</div>
+      <button class="modal-close" onclick="closeModal('modalSendFeedback')">×</button>
+    </div>
+    <div class="alert-box alert-info" style="margin-bottom:14px;">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Phản ánh sẽ được gửi đến ban quản lý chợ để xem xét và xử lý.</span>
+    </div>
+    <div class="form-group">
+      <label>Sạp <span style="color:var(--danger)">*</span></label>
+      <select class="form-control" id="fbStallSelect" required>
+        <option value="">— Chọn sạp đang thuê —</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Tiêu đề</label>
+      <input class="form-control" id="fbTitle" type="text" placeholder="Tóm tắt ngắn gọn vấn đề...">
+    </div>
+    <div class="form-group">
+      <label>Nội dung phản ánh <span style="color:var(--danger)">*</span></label>
+      <textarea class="form-control" id="fbContent" rows="4" placeholder="Mô tả chi tiết sự cố, khiếu nại..."></textarea>
+    </div>
+    <div id="fbMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalSendFeedback')">Hủy</button>
+      <button class="btn btn-teal" id="fbSubmitBtn" onclick="submitStallFeedback()">
+        <i class="fa-solid fa-paper-plane"></i> Gửi phản ánh
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Thêm / Sửa sản phẩm (multipart/form-data) -->
+<div class="modal-overlay" id="modalProduct" onclick="closeModalOverlay(event,'modalProduct')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title" id="productModalTitle">Thêm sản phẩm mới</div>
+      <button class="modal-close" onclick="closeModal('modalProduct')">×</button>
+    </div>
+    <form id="formProduct" onsubmit="submitProduct(event)" enctype="multipart/form-data">
+      <input type="hidden" id="productId">
+      <div class="form-group">
+        <label>Sạp <span style="color:var(--danger)">*</span></label>
+        <select class="form-control" id="productStallId" required>
+          <option value="">— Chọn sạp —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tên sản phẩm <span style="color:var(--danger)">*</span></label>
+        <input class="form-control" id="productName" placeholder="VD: Rau muống" required>
+      </div>
+      <div class="form-group">
+        <label>Giá (đ) <span style="color:var(--danger)">*</span></label>
+        <input class="form-control" type="number" id="productPrice" min="0" step="100" placeholder="15000" required>
+      </div>
+      <div class="form-group">
+        <label>Ảnh sản phẩm <span style="color:var(--text3);font-weight:400;">— tùy chọn</span></label>
+        <!-- Vùng upload / preview -->
+        <div class="img-upload-area" id="productUploadArea"
+             onclick="document.getElementById('productImage').click()"
+             ondragover="handleDragOver(event)"
+             ondragleave="handleDragLeave(event)"
+             ondrop="handleDrop(event)">
+          <!-- Placeholder (hiện khi chưa có ảnh) -->
+          <div class="img-upload-placeholder" id="productUploadPlaceholder">
+            <div class="iup-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="iup-text">Nhấn để chọn ảnh <span class="iup-or">hoặc kéo thả vào đây</span></div>
+            <div class="iup-hint">JPG, PNG, WEBP, GIF · Tối đa 5 MB</div>
+          </div>
+          <!-- Preview (hiện khi đã có ảnh) -->
+          <img id="productImagePreview" src="" alt="Preview"
+               style="display:none;width:100%;height:100%;object-fit:cover;border-radius:calc(var(--radius) - 2px);">
+        </div>
+        <!-- Thanh thông tin file đã chọn + nút xóa -->
+        <div class="img-file-info" id="productFileInfo" style="display:none;">
+          <i class="fa-solid fa-image" style="color:var(--primary);"></i>
+          <span id="productFileName" style="flex:1;font-size:12.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+          <span id="productFileSize" style="font-size:11.5px;color:var(--text3);white-space:nowrap;"></span>
+          <button type="button" class="img-remove-btn" onclick="removeProductImage()" title="Xóa ảnh">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <!-- Input file ẩn -->
+        <input type="file" id="productImage" accept="image/jpeg,image/png,image/webp,image/gif"
+               style="display:none;" onchange="onProductImageChange(this)">
+      </div>
+      <div id="productFormMsg" class="form-msg"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modalProduct')">Hủy</button>
+        <button type="submit" class="btn btn-primary" id="productSubmitBtn">
+          <i class="fa-solid fa-floppy-disk"></i> Lưu
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Xóa sản phẩm -->
+<div class="modal-overlay" id="modalDeleteProduct" onclick="closeModalOverlay(event,'modalDeleteProduct')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Xóa sản phẩm</div>
+      <button class="modal-close" onclick="closeModal('modalDeleteProduct')">×</button>
+    </div>
+    <div style="background:var(--danger-pale);border:1px solid #f4cfca;border-radius:var(--radius-sm);padding:14px;display:flex;gap:12px;align-items:flex-start;">
+      <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);font-size:18px;flex-shrink:0;margin-top:1px;"></i>
+      <div>
+        <div style="font-weight:600;color:var(--danger);margin-bottom:4px;">Hành động không thể hoàn tác</div>
+        <div style="font-size:13px;color:var(--text2);">Xóa sản phẩm <strong id="dpName">—</strong>?</div>
+      </div>
+    </div>
+    <div id="dpMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalDeleteProduct')">Hủy</button>
+      <button class="btn btn-danger" id="dpConfirmBtn" onclick="confirmDeleteProduct()">
+        <i class="fa-solid fa-trash"></i> Xóa
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Chi tiết đơn hàng -->
+<div class="modal-overlay" id="modalOrderDetail" onclick="closeModalOverlay(event,'modalOrderDetail')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Chi tiết đơn hàng <span id="odId" style="color:var(--text3);"></span></div>
+      <button class="modal-close" onclick="closeModal('modalOrderDetail')">×</button>
+    </div>
+    <div class="detail-grid" id="odGrid" style="margin-bottom:16px;"></div>
+    <div class="card-title" style="margin-bottom:10px;">Danh sách sản phẩm</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sản phẩm</th><th>Số lượng</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead>
+        <tbody id="odItems"></tbody>
+      </table>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px;font-size:14px;font-weight:700;color:var(--primary);">
+      Tổng cộng: <span id="odTotal" style="margin-left:8px;">—</span>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('modalOrderDetail')">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Chỉnh sửa hồ sơ -->
+<div class="modal-overlay" id="modalEditProfile" onclick="closeModalOverlay(event,'modalEditProfile')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Chỉnh sửa hồ sơ</div>
+      <button class="modal-close" onclick="closeModal('modalEditProfile')">×</button>
+    </div>
+    <div class="form-group">
+      <label>Họ và tên</label>
+      <input class="form-control" id="epFullName" placeholder="Nguyễn Thị...">
+    </div>
+    <div class="form-group">
+      <label>Số điện thoại</label>
+      <input class="form-control" id="epPhone" placeholder="09xx xxx xxx">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input class="form-control" type="email" id="epEmail" placeholder="email@example.com">
+    </div>
+    <div id="epMsg" class="form-msg"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalEditProfile')">Hủy</button>
+      <button class="btn btn-primary" onclick="saveProfile()">
+        <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="../js/trader.js"></script>
+</body>
+</html>
