@@ -4,8 +4,8 @@
    Không còn dữ liệu mẫu — mọi dữ liệu hiển thị đều lấy trực tiếp từ backend.
    ========================================================================== */
 
-const API      = "http://localhost:3000/api";
-const BASE_URL = "http://localhost:3000";
+const API      = "https://smartmarket-a133.onrender.com/api";
+const BASE_URL = "https://smartmarket-a133.onrender.com";
 
 // Ghép URL ảnh đầy đủ từ path lưu trong DB (/uploads/products/xxx.jpg)
 function imgUrl(url) {
