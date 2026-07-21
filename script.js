@@ -643,19 +643,47 @@ function observeReveal() {
    15. NAV TOGGLE (mobile)
    -------------------------------------------------------------------------- */
 function setupNav() {
-  const toggle = document.getElementById("navToggle");
-  const nav    = document.getElementById("mainNav");
+  const toggle  = document.getElementById("navToggle");
+  const nav     = document.getElementById("mainNav");
+  const actions = document.getElementById("headerActions");
+  const slot    = document.getElementById("headerActionsSlot");
   if (!toggle || !nav) return;
+
+  // Ghi nhớ vị trí gốc của header-actions để khôi phục đúng chỗ khi đóng menu
+  // hoặc khi màn hình được nới rộng lại về desktop.
+  const actionsHome     = actions ? actions.parentElement : null;
+  const actionsNextEl   = actions ? actions.nextElementSibling : null;
+
+  function moveActionsToSlot() {
+    if (actions && slot && !slot.contains(actions)) slot.appendChild(actions);
+  }
+  function restoreActionsHome() {
+    if (actions && actionsHome && actionsHome.contains(actions) === false) {
+      actionsHome.insertBefore(actions, actionsNextEl);
+    }
+  }
 
   toggle.addEventListener("click", () => {
     const open = nav.classList.toggle("is-open");
+    if (open) moveActionsToSlot(); else restoreActionsHome();
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Đóng menu" : "Mở menu");
   });
   nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
     nav.classList.remove("is-open");
+    restoreActionsHome();
     toggle.setAttribute("aria-expanded", "false");
   }));
+
+  // Nếu người dùng xoay ngang / nới cửa sổ về desktop trong lúc menu đang mở,
+  // đưa header-actions về đúng vị trí layout desktop.
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 760) {
+      nav.classList.remove("is-open");
+      restoreActionsHome();
+      toggle.setAttribute("aria-expanded", "false");
+    }
+  });
 }
 
 /* --------------------------------------------------------------------------

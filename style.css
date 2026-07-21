@@ -1068,13 +1068,22 @@ body.cursor-down .cursor-dot{
     display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
     background:var(--paper);padding:1.2rem 2rem;gap:1rem;border-bottom:1px solid var(--line);z-index:99;
   }
+  .header-actions{display:none;}
+  .header-actions-mobile-slot{display:contents;}
+  .main-nav.is-open .header-actions-mobile-slot #headerActions{
+    display:flex;flex-direction:column;align-items:stretch;gap:.7rem;
+    margin-top:.6rem;padding-top:1rem;border-top:1px solid var(--line);
+  }
+  .main-nav.is-open .header-actions-mobile-slot #headerActions .icon-btn{
+    align-self:flex-start;
+  }
   .nav-toggle{display:flex;}
   .header-inner{justify-content:space-between;}
   .hero{padding:3.5rem 1.4rem 4.5rem;}
   .hero-title{font-size:clamp(2.2rem,9vw,3rem);}
-  .hero-stats{gap:1rem 1.6rem;flex-wrap:wrap;}
+  .hero-stats{gap:0;justify-content:space-between;flex-wrap:nowrap;}
   .stat-divider{display:none;}
-  .products-grid,.traders-grid{grid-template-columns:1fr;}
+  .products-grid,.traders-grid{grid-template-columns:repeat(2,1fr);gap:.9rem;}
   .deals-grid{grid-template-columns:1fr;}
   .section{padding:4rem 1.4rem;}
   .section-alt > *{padding-left:1.4rem;padding-right:1.4rem;}
@@ -1082,12 +1091,23 @@ body.cursor-down .cursor-dot{
   .search-bar{flex-wrap:nowrap;}
   .search-bar button{padding:.68rem 1rem;}
   .trader-cta{padding:2rem;}
+
+  /* ── Khối "Doanh thu / Đánh giá / Tươi mỗi ngày / Sản phẩm nổi bật" ──
+     Giữ bố cục chia đều 2 cột giống PC (đã kế thừa từ @media 1024px:
+     Doanh thu + Đánh giá cạnh nhau, Tươi mỗi ngày và Sản phẩm mỗi cái
+     chiếm trọn 1 hàng). Chỉ tắt hiệu ứng 3D nổi vì nó gây chồng lấn/ẩn
+     nội dung trên màn hình nhỏ — không đổi bố cục grid. */
+  .panel{
+    transform:none !important;
+    animation:none !important;
+    will-change:auto;
+  }
+  .panel-product .product-media,
+  .panel-product:hover .product-media{
+    transform:none !important;
+  }
 }
 
-@media (max-width:420px){
-  .hero-panels{grid-template-columns:1fr;}
-  .panel-fresh{grid-column:1;}
-}
 /* --- Order history drawer --- */
 .order-lookup-form{padding:1rem 1.4rem 0;display:flex;flex-direction:column;gap:.5rem;}
 .order-lookup-hint{font-size:.78rem;color:var(--ink-muted);line-height:1.4;margin:0;}
