@@ -93,7 +93,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const message = document.getElementById('message');
 
     try {
-        const response = await fetch('http://127.0.0.1:3000/api/login', {
+        const response = await fetch('https://smartmarket-a133.onrender.com/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -142,6 +142,6 @@ function redirectByRole(role){
             window.location.href = 'customer.html';
             break;
         default:
-            window.location.href = 'http://127.0.0.1:5500/index.html';
+            window.location.href = 'index.html';
     }
 }

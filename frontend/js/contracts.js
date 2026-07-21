@@ -1,5 +1,5 @@
 const API =
-"http://localhost:3000/api/contracts";
+"https://smartmarket-a133.onrender.com/api/contracts";
 
 
 let editID=null;

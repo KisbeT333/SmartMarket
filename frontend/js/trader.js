@@ -20,9 +20,9 @@
    GET    /api/markets                        — danh sách chợ
 ══════════════════════════════════════════════════ */
 
-const API     = "http://localhost:3000/api";
+const API     = "https://smartmarket-a133.onrender.com/api";
 const API_ME  = `${API}/trader/me`;
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://smartmarket-a133.onrender.com";
 
 // Ghép URL ảnh đầy đủ từ path lưu trong DB (/uploads/products/xxx.jpg)
 function imgUrl(url) {

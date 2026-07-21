@@ -1,4 +1,3 @@
-
 function showToast(message, type = 'success') {
 
     let toast = document.getElementById('custom-toast');
@@ -133,7 +132,7 @@ document
     try {
 
         const response = await fetch(
-            'http://127.0.0.1:3000/api/register',
+            'https://smartmarket-a133.onrender.com/api/register',
             {
                 method: 'POST',
 
