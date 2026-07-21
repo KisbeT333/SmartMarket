@@ -338,7 +338,7 @@ router.get(
             session: false,
 
             failureRedirect:
-                'http://127.0.0.1:5500/frontend/pages/login.html'
+                'https://quanlycho.vercel.app/frontend/pages/login.html'
         }
 
     ),
@@ -369,7 +369,7 @@ router.get(
 
                 return res.redirect(
 
-                    `http://127.0.0.1:5500/frontend/pages/admin.html?token=${token}`
+                    `https://quanlycho.vercel.app/frontend/pages/admin.html?token=${token}`
 
                 );
 
@@ -379,7 +379,7 @@ router.get(
 
                 return res.redirect(
 
-                    `http://127.0.0.1:5500/frontend/pages/staff.html?token=${token}`
+                    `https://quanlycho.vercel.app/frontend/pages/staff.html?token=${token}`
 
                 );
 
@@ -387,7 +387,7 @@ router.get(
 
             return res.redirect(
 
-                `http://127.0.0.1:5500/frontend/pages/customer.html?token=${token}`
+                `https://quanlycho.vercel.app/frontend/pages/customer.html?token=${token}`
 
             );
 
@@ -398,7 +398,7 @@ router.get(
             console.log(error);
 
             res.redirect(
-                'http://127.0.0.1:5500/frontend/pages/login.html'
+                'https://quanlycho.vercel.app/frontend/pages/login.html'
             );
 
         }
@@ -476,7 +476,7 @@ router.post('/forgot-password', async (req, res) => {
 
         const resetLink =
 
-            `http://127.0.0.1:5500/frontend/pages/reset-password.html?token=${resetToken}`;
+            `https://quanlycho.vercel.app/frontend/pages/reset-password.html?token=${resetToken}`;
 
         const transporter =
             nodemailer.createTransport({
