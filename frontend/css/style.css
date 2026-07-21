@@ -1088,6 +1088,13 @@ body.cursor-down .cursor-dot{
   .hero-panels{grid-template-columns:1fr;}
   .panel-fresh{grid-column:1;}
 }
+
+@media (max-width:760px){
+  .nav-toggle{width:44px;height:44px;}
+  .cf-row-2{grid-template-columns:1fr;}
+  .cf-row input,.cf-row textarea{font-size:16px;padding:.8rem .9rem;}
+  .order-lookup-row input{font-size:16px;}
+}
 /* --- Order history drawer --- */
 .order-lookup-form{padding:1rem 1.4rem 0;display:flex;flex-direction:column;gap:.5rem;}
 .order-lookup-hint{font-size:.78rem;color:var(--ink-muted);line-height:1.4;margin:0;}

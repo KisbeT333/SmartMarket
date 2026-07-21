@@ -416,6 +416,22 @@ th.sortable.sorted .sort-icon { opacity: 1; color: var(--primary); }
   .stats-grid, .stats-grid-3 { grid-template-columns: 1fr; }
   .toast-container { left: 16px; right: 16px; max-width: none; }
   .filter-count { margin-left: 0; width: 100%; }
+
+  /* Nền mờ phía sau khi mở sidebar — bấm ra ngoài để đóng */
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(15,36,23,.4); z-index: 99; }
+  .sidebar.open ~ .sidebar-overlay { display: block; }
+
+  /* Vùng bấm lớn hơn cho tay cầm điện thoại */
+  .nav-item { padding: 13px 16px; font-size: 14.5px; min-height: 46px; }
+  .icon-btn, #sidebarToggle { width: 42px; height: 42px; }
+  .btn { padding: 11px 18px; font-size: 14px; min-height: 44px; }
+  .btn-sm { padding: 9px 15px; min-height: 40px; }
+  .logout-btn { min-height: 40px; }
+  input, select, textarea { font-size: 16px !important; }
+  .modal-footer { flex-direction: column-reverse; }
+  .modal-footer .btn { width: 100%; justify-content: center; }
+  .card { padding: 16px; }
+  th, td { padding: 10px; }
 }
 
 @media (max-width: 420px) {

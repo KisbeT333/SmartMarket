@@ -429,6 +429,7 @@ input,select,textarea{font-family:inherit;}
 
 @media (max-width:760px){
   .profile-layout{grid-template-columns:1fr;}
+  .profile-field input{font-size:16px;padding:.8rem .9rem;}
 }
 
 .form-msg{font-size:.82rem;margin-top:.4rem;min-height:0;display:none;}
