@@ -405,13 +405,22 @@ th.sortable.sorted .sort-icon { opacity: 1; color: var(--primary); }
   .detail-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .header { left: 0; }
-  .main { margin-left: 0; }
+  .sidebar { transform: translateX(-100%); box-shadow: none; transition: transform .25s ease, box-shadow .25s ease; }
+  .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .header { left: 0; padding: 0 14px; gap: 8px; }
+  .main { margin-left: 0; padding: 16px; }
+  #sidebarToggle { display: flex !important; flex-shrink: 0; }
+  .header-search { display: none; }
+  .header-title { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logout-btn { font-size: 12.5px; padding: 6px 10px; }
   .stats-grid, .stats-grid-3 { grid-template-columns: 1fr; }
   .toast-container { left: 16px; right: 16px; max-width: none; }
   .filter-count { margin-left: 0; width: 100%; }
+}
+
+@media (max-width: 420px) {
+  .header-title { display: none; }
+  .card { padding: 14px; }
 }
 
 /* ─── PRODUCT IMAGE UPLOAD ─── */

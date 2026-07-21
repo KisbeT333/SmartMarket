@@ -2,7 +2,7 @@ body{
 
 margin:0;
 
-font-family:Segoe UI;
+font-family:"Segoe UI",Arial,sans-serif;
 
 background:#f7f4ea;
 
@@ -14,6 +14,10 @@ background:#f7f4ea;
 
 padding:30px;
 
+max-width:1200px;
+
+margin:0 auto;
+
 }
 
 
@@ -21,6 +25,8 @@ padding:30px;
 h1{
 
 color:#173622;
+
+font-size:clamp(1.3rem,4vw,1.8rem);
 
 }
 
@@ -32,7 +38,13 @@ display:flex;
 
 justify-content:space-between;
 
+align-items:center;
+
+gap:12px;
+
 margin-bottom:20px;
+
+flex-wrap:wrap;
 
 }
 
@@ -45,6 +57,18 @@ padding:12px;
 border-radius:8px;
 
 border:1px solid #ccc;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+}
+
+#search{
+
+flex:1;
+
+min-width:160px;
 
 }
 
@@ -62,6 +86,30 @@ border-radius:10px;
 
 cursor:pointer;
 
+font-size:15px;
+
+white-space:nowrap;
+
+}
+
+button:hover{
+
+background:#cf8f2f;
+
+}
+
+
+
+.table-wrap{
+
+width:100%;
+
+overflow-x:auto;
+
+-webkit-overflow-scrolling:touch;
+
+border-radius:15px;
+
 }
 
 
@@ -70,11 +118,11 @@ table{
 
 width:100%;
 
+min-width:640px;
+
 background:white;
 
-border-radius:15px;
-
-overflow:hidden;
+border-collapse:collapse;
 
 }
 
@@ -88,6 +136,10 @@ color:white;
 
 padding:15px;
 
+white-space:nowrap;
+
+text-align:left;
+
 }
 
 
@@ -97,6 +149,12 @@ td{
 padding:15px;
 
 border-bottom:1px solid #ddd;
+
+}
+
+tr:hover td{
+
+background:#faf8f0;
 
 }
 
@@ -118,6 +176,20 @@ bottom:0;
 
 background:#0007;
 
+padding:20px;
+
+align-items:flex-start;
+
+justify-content:center;
+
+overflow-y:auto;
+
+}
+
+.modal.open{
+
+display:flex;
+
 }
 
 
@@ -126,16 +198,62 @@ background:#0007;
 
 background:white;
 
-width:350px;
+width:100%;
+
+max-width:380px;
 
 padding:30px;
 
 border-radius:20px;
 
-margin:100px auto;
+margin:80px auto;
 
 display:grid;
 
 gap:15px;
+
+}
+
+.form input{
+
+width:100%;
+
+}
+
+.form button{
+
+width:100%;
+
+}
+
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width:600px){
+
+  .container{
+    padding:16px;
+  }
+
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .toolbar button{
+    width:100%;
+  }
+
+  .table-wrap{
+    border-radius:10px;
+  }
+
+  .form{
+    margin:40px auto;
+    padding:22px;
+    border-radius:16px;
+    max-width:100%;
+  }
 
 }

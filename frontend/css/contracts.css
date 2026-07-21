@@ -2,7 +2,7 @@ body{
 
 margin:0;
 
-font-family:Segoe UI;
+font-family:"Segoe UI",Arial,sans-serif;
 
 background:#f7f4ea;
 
@@ -13,6 +13,10 @@ background:#f7f4ea;
 
 padding:30px;
 
+max-width:1200px;
+
+margin:0 auto;
+
 }
 
 
@@ -20,6 +24,10 @@ padding:30px;
 h1{
 
 color:#173622;
+
+font-size:clamp(1.3rem,4vw,1.8rem);
+
+word-break:break-word;
 
 }
 
@@ -37,15 +45,38 @@ border-radius:10px;
 
 cursor:pointer;
 
+font-size:15px;
+
+}
+
+button:hover{
+
+background:#cf8f2f;
+
 }
 
 
 
-table{
+.table-wrap{
 
 margin-top:25px;
 
 width:100%;
+
+overflow-x:auto;
+
+-webkit-overflow-scrolling:touch;
+
+border-radius:10px;
+
+}
+
+
+table{
+
+width:100%;
+
+min-width:640px;
 
 background:white;
 
@@ -63,18 +94,27 @@ color:white;
 
 padding:15px;
 
+white-space:nowrap;
+
+text-align:left;
+
 }
 
 
 td{
 
-padding:12px;
+padding:12px 15px;
 
 border-bottom:1px solid #ddd;
 
 }
 
 
+tr:hover td{
+
+background:#faf8f0;
+
+}
 
 
 
@@ -88,6 +128,20 @@ inset:0;
 
 background:#0007;
 
+padding:20px;
+
+align-items:flex-start;
+
+justify-content:center;
+
+overflow-y:auto;
+
+}
+
+.modal.open{
+
+display:flex;
+
 }
 
 
@@ -97,11 +151,13 @@ background:#0007;
 
 background:white;
 
-width:350px;
+width:100%;
+
+max-width:380px;
 
 padding:30px;
 
-margin:100px auto;
+margin:80px auto;
 
 border-radius:20px;
 
@@ -116,5 +172,49 @@ gap:15px;
 input,select{
 
 padding:12px;
+
+width:100%;
+
+box-sizing:border-box;
+
+border:1px solid #ccc;
+
+border-radius:8px;
+
+font-size:15px;
+
+}
+
+.form button{
+
+width:100%;
+
+}
+
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width:600px){
+
+  .container{
+    padding:16px;
+  }
+
+  button{
+    width:100%;
+  }
+
+  .table-wrap{
+    margin-top:18px;
+    border-radius:8px;
+  }
+
+  .form{
+    margin:40px auto;
+    padding:22px;
+    border-radius:16px;
+    max-width:100%;
+  }
 
 }

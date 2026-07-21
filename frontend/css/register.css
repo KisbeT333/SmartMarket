@@ -308,6 +308,10 @@ button[type="submit"]:hover {
 
 @media(max-width:768px) {
 
+  .left {
+    padding: 2rem 1.2rem;
+  }
+
   .form-box {
     padding: 2rem 1.5rem;
   }
@@ -320,11 +324,49 @@ button[type="submit"]:hover {
     grid-column: auto;
   }
 
+  .right {
+    padding: 2rem 1.2rem;
+    min-height: 260px;
+  }
+
   .brand h1 {
     font-size: 2.2rem;
   }
 
+  .brand p {
+    font-size: .92rem;
+  }
+
   .circle {
     width: 280px;
+  }
+}
+
+@media(max-width:480px) {
+
+  .form-box {
+    padding: 1.6rem 1.1rem;
+    border-radius: 20px;
+  }
+
+  .form-box h2 {
+    font-size: 1.7rem;
+  }
+
+  .right {
+    min-height: 190px;
+    padding: 1.6rem 1rem;
+  }
+
+  .circle {
+    width: 190px;
+  }
+
+  .brand h1 {
+    font-size: 1.7rem;
+  }
+
+  .brand p {
+    display: none;
   }
 }
