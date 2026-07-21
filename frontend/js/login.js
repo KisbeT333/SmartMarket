@@ -142,6 +142,6 @@ function redirectByRole(role){
             window.location.href = 'customer.html';
             break;
         default:
-            window.location.href = 'index.html';
+            window.location.href = '/index.html';
     }
 }
